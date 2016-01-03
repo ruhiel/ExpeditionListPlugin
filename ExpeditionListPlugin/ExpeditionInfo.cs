@@ -102,7 +102,7 @@ namespace ExpeditionListPlugin
             new ExpeditionInfo {Area="南方", EName="MO作戦", Time="07:00", Lv=40, RequireShipType=new Dictionary<string, int>() { { "(?<空母>正規空母|軽空母|水上機母艦)", 2 }, { "(?<重>重巡洋艦)", 1 }, {"(?<駆>駆逐艦)", 1 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=6, Fuel=0, Ammunition=0, Steel=240, Bauxite=280, DevelopmentMaterials=1, FurnitureBox="小2"},
             new ExpeditionInfo {Area="南方", EName="水上機基地建設", Time="09:00", Lv=30, RequireShipType=new Dictionary<string, int>() { { "(?<水母>水上機母艦)", 2 }, { "(?<軽>軽巡洋艦)", 1 }, {"(?<駆>駆逐艦)", 1 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=6, Fuel=480, Ammunition=0, Steel=200, Bauxite=200, InstantRepairMaterials=1, FurnitureBox="中1"},
             new ExpeditionInfo {Area="南方", EName="東京急行", Time="02:45", Lv=50, SumLv=200, RequireItemNum=new Dictionary<string, int>() { { "ドラム缶(輸送用)", 4 } }, RequireItemShipNum=new Dictionary<string, int>() { { "ドラム缶(輸送用)", 3 } }, RequireShipType=new Dictionary<string, int>() { { "(?<軽>軽巡洋艦)", 1 }, {"(?<駆>駆逐艦)", 5 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=6, Fuel=0, Ammunition=380, Steel=270, Bauxite=0, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="南方", EName="東京急行（弐）", Time="02:55", Lv=65, SumLv=240, RequireItemNum=new Dictionary<string, int>() { { "ドラム缶(輸送用)", 8 } }, RequireItemShipNum=new Dictionary<string, int>() { { "ドラム缶(輸送用)", 4 } }, RequireShipType=new Dictionary<string, int>() { {"(?<駆>駆逐艦)", 5 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=6, Fuel=420, Ammunition=0, Steel=200, Bauxite=0, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="南方", EName="東京急行(弐)", Time="02:55", Lv=65, SumLv=240, RequireItemNum=new Dictionary<string, int>() { { "ドラム缶(輸送用)", 8 } }, RequireItemShipNum=new Dictionary<string, int>() { { "ドラム缶(輸送用)", 4 } }, RequireShipType=new Dictionary<string, int>() { {"(?<駆>駆逐艦)", 5 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=6, Fuel=420, Ammunition=0, Steel=200, Bauxite=0, FurnitureBox="小1"},
             new ExpeditionInfo {Area="南方", EName="遠洋潜水艦作戦", Time="30:00", Lv=3, SumLv=180, RequireShipType=new Dictionary<string, int>() { { "(?<潜母艦>潜水母艦)", 1 }, { "(?<潜>潜水艦|潜水空母)", 4 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=5, Fuel=0, Ammunition=0, Steel=300, Bauxite=0, InstantRepairMaterials=2, FurnitureBox="中1"},
             new ExpeditionInfo {Area="南方", EName="水上機前線輸送", Time="06:50", Lv=25, SumLv=150, RequireShipType=new Dictionary<string, int>() { { "(?<軽>軽巡洋艦)", 1 }, { "(?<水母>水上機母艦)", 2 }, {"(?<駆>駆逐艦)", 2 } }, isSuccess2=false, isSuccess3=false, isSuccess4=false, ShipNum=6, Fuel=300, Ammunition=300, Steel=0, Bauxite=100, InstantRepairMaterials=1, FurnitureBox="小3"},
         };
@@ -120,26 +120,32 @@ namespace ExpeditionListPlugin
             set { _ExpeditionTable = value; }
         }
 
-        public bool CheckShipNum(int index)
+        public bool CheckAll(int index)
+        {
+            return CheckShipNum(index) && FlagshipLvCheck(index) && SumLvCheck(index)
+                        && RequireShipTypeCheck(index) && RequireItemCheck(index);
+        }
+
+        private bool CheckShipNum(int index)
         {
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length >= ShipNum;
         }
 
-        public bool FlagshipLvCheck(int index)
+        private bool FlagshipLvCheck(int index)
         {
             if (KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length == 0) return false;
 
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.First().Level >= Lv;
         }
 
-        public bool SumLvCheck(int index)
+        private bool SumLvCheck(int index)
         {
             if (null == SumLv) return true;
 
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Level).Sum() >= SumLv;
         }
 
-        public bool RequireShipTypeCheck(int index)
+        private bool RequireShipTypeCheck(int index)
         {
             if (null == RequireShipType) return true;
 
@@ -154,7 +160,7 @@ namespace ExpeditionListPlugin
             return true;
         }
 
-        public bool RequireItemCheck(int index)
+        private bool RequireItemCheck(int index)
         {
             if (null == RequireItemNum || null == RequireItemShipNum) return true;
             foreach(KeyValuePair<string, int> pair in RequireItemShipNum)

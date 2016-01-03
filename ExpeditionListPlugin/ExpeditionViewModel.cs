@@ -141,13 +141,11 @@ namespace ExpeditionListPlugin
                 {
                     String name = KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.Mission.Title;
 
-                    ExpeditionInfo info = ExpeditionInfo.ExpeditionList.ToList().Where(expedition => expedition.EName.Equals(name)).First();
+                    var list = ExpeditionInfo.ExpeditionList.ToList().Where(expedition => expedition.EName.Equals(name));
 
-                    if (null != info)
+                    if (list.Count() > 0)
                     {
-                        bool result = info.CheckShipNum(index) && info.FlagshipLvCheck(index) && info.SumLvCheck(index) 
-                        && info.RequireShipTypeCheck(index) && info.RequireItemCheck(index);
-                        if(!result)
+                        if(!list.First().CheckAll(index))
                         {
                             Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
                                 Environment.NewLine + "編成を確認してください。");
