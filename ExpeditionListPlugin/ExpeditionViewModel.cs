@@ -6,6 +6,9 @@ using MetroTrilithon.Mvvm;
 using System;
 using System.Reactive.Linq;
 using System.Linq;
+using System.Windows;
+using Grabacr07.KanColleViewer.Composition;
+
 namespace ExpeditionListPlugin
 {
     public class ExpeditionViewModel : ViewModel
@@ -108,6 +111,7 @@ namespace ExpeditionListPlugin
 
         #region ExpeditionInfos 変更通知プロパティ
         private List<ExpeditionInfo> _ExpeditionInfos;
+
         public List<ExpeditionInfo> ExpeditionInfos
         {
             get
@@ -122,10 +126,36 @@ namespace ExpeditionListPlugin
         }
         #endregion
 
-        public ExpeditionViewModel()
+        private ExpeditionListPlugin plugin;
+
+        private Action<int> StartExpeditionCheckAction;
+
+        public ExpeditionViewModel(ExpeditionListPlugin plugin)
         {
             //KanColleClient.Current.Homeport.Organization
             //    .Subscribe(nameof(Organization.Fleets), this.InitializeFleets).AddTo(this);
+            this.plugin = plugin;
+            StartExpeditionCheckAction = (int index) =>
+            {
+                if (KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.IsInExecution)
+                {
+                    String name = KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.Mission.Title;
+
+                    ExpeditionInfo info = ExpeditionInfo.ExpeditionList.ToList().Where(expedition => expedition.EName.Equals(name)).First();
+
+                    if (null != info)
+                    {
+                        bool result = info.CheckShipNum(index) && info.FlagshipLvCheck(index) && info.SumLvCheck(index) 
+                        && info.RequireShipTypeCheck(index) && info.RequireItemCheck(index);
+                        if(!result)
+                        {
+                            Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
+                                Environment.NewLine + "編成を確認してください。");
+                        }
+                    }
+                }
+            };
+
             InitializeExpedition();
             KanColleProxy proxy = KanColleClient.Current.Proxy;
             proxy.api_port.Subscribe(x => this.UpdateView());
@@ -139,6 +169,7 @@ namespace ExpeditionListPlugin
         {
             isAllArea = true;
             UpdateExpedition();
+            
             this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization)
             {
                 {
@@ -169,7 +200,38 @@ namespace ExpeditionListPlugin
                     (_, __) => { DispatcherHelper.UIDispatcher.Invoke(this.UpdateView); }
                 }
             });
-            
+
+            // ループでなぜか登録できないのでべた書き
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization.Fleets[2].Expedition)
+            {
+                {
+                    () => KanColleClient.Current.Homeport.Organization.Fleets[2].Expedition.IsInExecution,
+                    (_, __) => {
+                            
+                        DispatcherHelper.UIDispatcher.Invoke(StartExpeditionCheckAction, new object[] { 2 });
+                    }
+                }
+            });
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization.Fleets[3].Expedition)
+            {
+                {
+                    () => KanColleClient.Current.Homeport.Organization.Fleets[3].Expedition.IsInExecution,
+                    (_, __) => {
+
+                        DispatcherHelper.UIDispatcher.Invoke(StartExpeditionCheckAction, new object[] { 3 });
+                    }
+                }
+            });
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization.Fleets[4].Expedition)
+            {
+                {
+                    () => KanColleClient.Current.Homeport.Organization.Fleets[4].Expedition.IsInExecution,
+                    (_, __) => {
+
+                        DispatcherHelper.UIDispatcher.Invoke(StartExpeditionCheckAction, new object[] { 4 });
+                    }
+                }
+            });
         }
 
         public void SetArea(String area)
@@ -208,6 +270,20 @@ namespace ExpeditionListPlugin
             if (!KanColleClient.Current.IsStarted) return;
 
             UpdateExpedition();
+        }
+
+        private void Notify(string type, string title, string message)
+        {            this.plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)            {
+                Activated = () =>
+                {
+                    DispatcherHelper.UIDispatcher.Invoke(() =>                    {
+                        var window = Application.Current.MainWindow;
+                        if (window.WindowState == WindowState.Minimized)
+                            window.WindowState = WindowState.Normal;
+                        window.Activate();
+                    });
+                },
+            });
         }
     }
 }

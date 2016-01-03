@@ -120,26 +120,26 @@ namespace ExpeditionListPlugin
             set { _ExpeditionTable = value; }
         }
 
-        private bool CheckShipNum(int index)
+        public bool CheckShipNum(int index)
         {
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length >= ShipNum;
         }
 
-        private bool FlagshipLvCheck(int index)
+        public bool FlagshipLvCheck(int index)
         {
             if (KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length == 0) return false;
 
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.First().Level >= Lv;
         }
 
-        private bool SumLvCheck(int index)
+        public bool SumLvCheck(int index)
         {
             if (null == SumLv) return true;
 
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Level).Sum() >= SumLv;
         }
 
-        private bool RequireShipTypeCheck(int index)
+        public bool RequireShipTypeCheck(int index)
         {
             if (null == RequireShipType) return true;
 
@@ -154,7 +154,7 @@ namespace ExpeditionListPlugin
             return true;
         }
 
-        private bool RequireItemCheck(int index)
+        public bool RequireItemCheck(int index)
         {
             if (null == RequireItemNum || null == RequireItemShipNum) return true;
             foreach(KeyValuePair<string, int> pair in RequireItemShipNum)
