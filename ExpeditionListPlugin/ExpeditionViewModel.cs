@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Linq;
 using System.Windows;
 using Grabacr07.KanColleViewer.Composition;
+using Grabacr07.KanColleWrapper.Models;
 
 namespace ExpeditionListPlugin
 {
@@ -150,6 +151,11 @@ namespace ExpeditionListPlugin
                             Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
                                 Environment.NewLine + "編成を確認してください。");
                         }
+                        else if(KanColleClient.Current.Homeport.Organization.Fleets[index].State.Situation.HasFlag(FleetSituation.InShortSupply))
+                        {
+                            Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
+                                Environment.NewLine + "艦隊に完全に補給されていない艦娘がいます。");
+                        }
                     }
                 }
             };
@@ -271,10 +277,13 @@ namespace ExpeditionListPlugin
         }
 
         private void Notify(string type, string title, string message)
-        {            this.plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)            {
+        {
+            this.plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)
+            {
                 Activated = () =>
                 {
-                    DispatcherHelper.UIDispatcher.Invoke(() =>                    {
+                    DispatcherHelper.UIDispatcher.Invoke(() =>
+                    {
                         var window = Application.Current.MainWindow;
                         if (window.WindowState == WindowState.Minimized)
                             window.WindowState = WindowState.Normal;

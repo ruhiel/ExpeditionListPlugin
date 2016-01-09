@@ -109,9 +109,9 @@ namespace ExpeditionListPlugin
 
         public void Check()
         {
-            isSuccess2 = CheckShipNum(2) && FlagshipLvCheck(2) && SumLvCheck(2) && RequireShipTypeCheck(2) && RequireItemCheck(2);
-            isSuccess3 = CheckShipNum(3) && FlagshipLvCheck(3) && SumLvCheck(3) && RequireShipTypeCheck(3) && RequireItemCheck(3);
-            isSuccess4 = CheckShipNum(4) && FlagshipLvCheck(4) && SumLvCheck(4) && RequireShipTypeCheck(4) && RequireItemCheck(4);
+            isSuccess2 = CheckAll(2);
+            isSuccess3 = CheckAll(3);
+            isSuccess4 = CheckAll(4);
         }
 
         public static ExpeditionInfo[] ExpeditionList
