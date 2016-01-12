@@ -127,38 +127,13 @@ namespace ExpeditionListPlugin
         }
         #endregion
 
-        private ExpeditionListPlugin plugin;
-
-        private Action<int> StartExpeditionCheckAction;
+        private readonly ExpeditionNotifier notifier;
 
         public ExpeditionViewModel(ExpeditionListPlugin plugin)
         {
             //KanColleClient.Current.Homeport.Organization
             //    .Subscribe(nameof(Organization.Fleets), this.InitializeFleets).AddTo(this);
-            this.plugin = plugin;
-            StartExpeditionCheckAction = (int index) =>
-            {
-                if (KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.IsInExecution)
-                {
-                    String name = KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.Mission.Title;
-
-                    var list = ExpeditionInfo.ExpeditionList.ToList().Where(expedition => expedition.EName.Equals(name));
-
-                    if (list.Count() > 0)
-                    {
-                        if(!list.First().CheckAll(index))
-                        {
-                            Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
-                                Environment.NewLine + "編成を確認してください。");
-                        }
-                        else if(KanColleClient.Current.Homeport.Organization.Fleets[index].State.Situation.HasFlag(FleetSituation.InShortSupply))
-                        {
-                            Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
-                                Environment.NewLine + "艦隊に完全に補給されていない艦娘がいます。");
-                        }
-                    }
-                }
-            };
+            this.notifier = new ExpeditionNotifier(plugin);
 
             InitializeExpedition();
             KanColleProxy proxy = KanColleClient.Current.Proxy;
@@ -204,38 +179,6 @@ namespace ExpeditionListPlugin
                     (_, __) => { DispatcherHelper.UIDispatcher.Invoke(this.UpdateView); }
                 }
             });
-
-            // ループでなぜか登録できないのでべた書き
-            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization.Fleets[2].Expedition)
-            {
-                {
-                    () => KanColleClient.Current.Homeport.Organization.Fleets[2].Expedition.IsInExecution,
-                    (_, __) => {
-                            
-                        DispatcherHelper.UIDispatcher.Invoke(StartExpeditionCheckAction, new object[] { 2 });
-                    }
-                }
-            });
-            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization.Fleets[3].Expedition)
-            {
-                {
-                    () => KanColleClient.Current.Homeport.Organization.Fleets[3].Expedition.IsInExecution,
-                    (_, __) => {
-
-                        DispatcherHelper.UIDispatcher.Invoke(StartExpeditionCheckAction, new object[] { 3 });
-                    }
-                }
-            });
-            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Organization.Fleets[4].Expedition)
-            {
-                {
-                    () => KanColleClient.Current.Homeport.Organization.Fleets[4].Expedition.IsInExecution,
-                    (_, __) => {
-
-                        DispatcherHelper.UIDispatcher.Invoke(StartExpeditionCheckAction, new object[] { 4 });
-                    }
-                }
-            });
         }
 
         public void SetArea(String area)
@@ -274,23 +217,6 @@ namespace ExpeditionListPlugin
             if (!KanColleClient.Current.IsStarted) return;
 
             UpdateExpedition();
-        }
-
-        private void Notify(string type, string title, string message)
-        {
-            this.plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)
-            {
-                Activated = () =>
-                {
-                    DispatcherHelper.UIDispatcher.Invoke(() =>
-                    {
-                        var window = Application.Current.MainWindow;
-                        if (window.WindowState == WindowState.Minimized)
-                            window.WindowState = WindowState.Normal;
-                        window.Activate();
-                    });
-                },
-            });
         }
     }
 }

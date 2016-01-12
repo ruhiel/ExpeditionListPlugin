@@ -139,6 +139,7 @@
     </Page>
     <Compile Include="ExpeditionInfo.cs" />
     <Compile Include="ExpeditionListPlugin.cs" />
+    <Compile Include="ExpeditionNotifier.cs" />
     <Compile Include="ExpeditionViewModel.cs" />
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
