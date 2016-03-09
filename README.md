@@ -1,6 +1,10 @@
 # ExpeditionListPlugin
 遠征一覧と各艦隊が成功条件を満たすかを表示する KanColleViewer 用のプラグインです。
 
+![キャプチャ1](https://github.com/ruhiel/ExpeditionListPlugin/blob/master/ExpeditionListPlugin/images/capture0.png)
+
+![キャプチャ2](https://github.com/ruhiel/ExpeditionListPlugin/blob/master/ExpeditionListPlugin/images/capture2.png)
+
 ### インストール
 
 * `ExpeditionListPlugin.dll` を KanColleViewer の `Plugins` ディレクトリに放り込んで下さい。
