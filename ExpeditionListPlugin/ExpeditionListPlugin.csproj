@@ -170,9 +170,10 @@
     <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.1.1.0\analyzers\KanColleViewer.Composition.dll" />
     <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.1.1.0\analyzers\KanColleViewer.PluginAnalyzer.dll" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Resource Include="images\capture1.png" />
+    <Resource Include="images\capture0.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="images\capture2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
