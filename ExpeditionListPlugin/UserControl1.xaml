@@ -322,6 +322,16 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="旗艦艦種" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="12" Text="{Binding FlagShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="60">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="ドラム" HorizontalAlignment="Center"/>
