@@ -1,0 +1,2 @@
+# ExpeditionListPluginMod
+ExpeditionListPluginの改造版です
