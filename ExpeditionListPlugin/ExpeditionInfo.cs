@@ -160,11 +160,21 @@ namespace ExpeditionListPlugin
                         && FlagShipTypeCheck(index);
         }
 
+        /// <summary>
+        /// 艦数チェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         private bool CheckShipNum(int index)
         {
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length >= ShipNum;
         }
 
+        /// <summary>
+        /// 旗艦Lvチェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         private bool FlagshipLvCheck(int index)
         {
             if (KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length == 0) return false;
@@ -172,6 +182,11 @@ namespace ExpeditionListPlugin
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.First().Level >= Lv;
         }
 
+        /// <summary>
+        /// 合計Lvチェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         private bool SumLvCheck(int index)
         {
             if (null == SumLv) return true;
@@ -179,6 +194,11 @@ namespace ExpeditionListPlugin
             return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Level).Sum() >= SumLv;
         }
 
+        /// <summary>
+        /// 艦種チェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         private bool RequireShipTypeCheck(int index)
         {
             if (null == RequireShipType) return true;
@@ -194,6 +214,11 @@ namespace ExpeditionListPlugin
             return true;
         }
 
+        /// <summary>
+        /// 装備のチェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         private bool RequireItemCheck(int index)
         {
             if (null == RequireItemNum || null == RequireItemShipNum) return true;
@@ -222,6 +247,11 @@ namespace ExpeditionListPlugin
             return true;
         }
 
+        /// <summary>
+        /// 旗艦の艦種チェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         private bool FlagShipTypeCheck(int index)
         {
             if (null == FlagShipType) return true;
