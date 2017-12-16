@@ -8,24 +8,64 @@ namespace ExpeditionListPlugin
 {
     public class ExpeditionInfo
     {
+        /// <summary>
+        /// 駆逐艦
+        /// </summary>
         public static readonly string DESTROYER = "(?<駆>駆逐艦)";
 
+        /// <summary>
+        /// 軽巡洋艦
+        /// </summary>
         public static readonly string LIGHTCRUISER = "(?<軽>軽巡洋艦)";
 
+        /// <summary>
+        /// 軽巡洋艦
+        /// </summary>
         public static readonly string HEAVYCRUISER = "(?<重>重巡洋艦)";
 
+        /// <summary>
+        /// 航空戦艦
+        /// </summary>
         public static readonly string AVIATIONBATTLESHIP = "(?<航戦>航空戦艦)";
 
+        /// <summary>
+        /// 潜水艦
+        /// </summary>
         public static readonly string SUBMARINE = "(?<潜>潜水艦|潜水空母)";
 
+        /// <summary>
+        /// 練習巡洋艦
+        /// </summary>
         public static readonly string TRAININGCRUISER = "(?<練>練習巡洋艦)";
 
+        /// <summary>
+        /// 水上機母艦
+        /// </summary>
         public static readonly string SEAPLANETENDER = "(?<水母>水上機母艦)";
 
+        /// <summary>
+        /// 潜水母艦
+        /// </summary>
         public static readonly string SUBMARINETENDER = "(?<潜母艦>潜水母艦)";
-        
+
+        /// <summary>
+        /// 空母
+        /// </summary>
         public static readonly string AIRCRAFTCARRIER = "(?<空母>正規空母|装甲空母|軽空母|水上機母艦)";
 
+        /// <summary>
+        /// 海防艦
+        /// </summary>
+        public static readonly string ESCORT = "(?<海防>海防艦)";
+
+        /// <summary>
+        /// 護衛空母
+        /// </summary>
+        public static readonly string ESCORTECARRIER = "(?<護母>護衛空母)";
+
+        /// <summary>
+        /// ドラム缶
+        /// </summary>
         public static readonly string DRUMCANISTER = "ドラム缶(輸送用)";
 
         public string Area { get; set; }
@@ -70,7 +110,7 @@ namespace ExpeditionListPlugin
                         list.Add(match.Groups[1].Value + pair.Value);
                     }
                 }
-                return string.Join(" ",list);
+                return string.Join(" ", list);
             }
         }
         public string RequireDrum
@@ -81,6 +121,33 @@ namespace ExpeditionListPlugin
                 return RequireItemShipNum[DRUMCANISTER] + "隻 " + RequireItemNum[DRUMCANISTER] + "個";
             }
         }
+
+        /// <summary>
+        /// 必要合算艦種
+        /// </summary>
+        public string[] RequireSumShipType { get; set; }
+
+        /// <summary>
+        /// 必要合算艦種数
+        /// </summary>
+        public int RequireSumShipTypeNum { get; set; }
+
+        /// <summary>
+        /// 合計対空値
+        /// </summary>
+        public int? SumAA { get; set; }
+
+        /// <summary>
+        /// 合計対潜値
+        /// </summary>
+        public int? SumASW { get; set; }
+        //
+        /// <summary>
+        /// 合計索敵値
+        /// </summary>
+        public int? SumViewRange { get; set; }
+
+
         public int? Fuel { get; set; }
         public int? Ammunition { get; set; }
         public int? Bauxite { get; set; }
@@ -88,6 +155,9 @@ namespace ExpeditionListPlugin
         public int? InstantBuildMaterials { get; set; }
         public int? InstantRepairMaterials { get; set; }
         public int? DevelopmentMaterials { get; set; }
+        /// <summary>
+        /// 家具箱
+        /// </summary>
         public string FurnitureBox { get; set; }
         public bool isFuelNull { get { return Fuel == null; } }
         public bool isAmmunitionNull { get { return Ammunition == null; } }
@@ -105,6 +175,10 @@ namespace ExpeditionListPlugin
             new ExpeditionInfo {Area="鎮守", EName="観艦式予行", Time="01:00", Lv=5,ShipNum=6, Steel=50, Bauxite=30, InstantBuildMaterials=1},
             new ExpeditionInfo {Area="鎮守", EName="観艦式", Time="03:00", Lv=6, ShipNum=6, Fuel=50, Ammunition=100, Steel=50, Bauxite=50, InstantBuildMaterials=2, DevelopmentMaterials=1},
 
+            new ExpeditionInfo {Area="鎮守", EName="兵站強化任務", Time="00:25", Lv=5, ShipNum=4, Fuel=45, Ammunition=45, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum = 3 },
+            new ExpeditionInfo {Area="鎮守", EName="海峡警備行動", Time="00:55", Lv=20, ShipNum=4, Fuel=70, Ammunition=40,Bauxite=10,DevelopmentMaterials=1,InstantRepairMaterials=1, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum = 4 , SumAA=70, SumASW=180},
+            new ExpeditionInfo {Area="鎮守", EName="長時間対潜警戒", Time="02:15", Lv=35,SumLv=185, ShipNum=5, Fuel=120, Steel=60,Bauxite=60,InstantRepairMaterials=1,DevelopmentMaterials=2,RequireShipType=new Dictionary<string, int>() { { LIGHTCRUISER, 1 }}, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum =3 ,SumASW=280 },
+
             new ExpeditionInfo {Area="南西", EName="タンカー護衛任務", Time="04:00", Lv=3, RequireShipType=new Dictionary<string, int>() { { LIGHTCRUISER, 1 }, {DESTROYER, 2 } }, ShipNum=4, Fuel=350, InstantRepairMaterials=2, FurnitureBox="小1"},
             new ExpeditionInfo {Area="南西", EName="強行偵察任務", Time="01:30", Lv=3, RequireShipType=new Dictionary<string, int>() { { LIGHTCRUISER, 2 } }, ShipNum=3, Ammunition=50, Bauxite=30, InstantRepairMaterials=1, InstantBuildMaterials=1},
             new ExpeditionInfo {Area="南西", EName="ボーキサイト輸送任務", Time="05:00", Lv=6, RequireShipType=new Dictionary<string, int>() { {DESTROYER, 2 } }, ShipNum=4, Bauxite=250, InstantRepairMaterials=1, FurnitureBox="小1"},
@@ -113,6 +187,8 @@ namespace ExpeditionListPlugin
             new ExpeditionInfo {Area="南西", EName="包囲陸戦隊撤収作戦", Time="06:00", Lv=6, RequireShipType=new Dictionary<string, int>() { { LIGHTCRUISER, 1 }, {DESTROYER, 3 } }, ShipNum=6, Ammunition=240, Steel=200, InstantRepairMaterials=1, DevelopmentMaterials=1},
             new ExpeditionInfo {Area="南西", EName="囮機動部隊支援作戦", Time="12:00", Lv=8, RequireShipType=new Dictionary<string, int>() { { AIRCRAFTCARRIER, 2 }, {DESTROYER, 2 } }, ShipNum=6, Steel=300, Bauxite=400, DevelopmentMaterials=1, FurnitureBox="大1"},
             new ExpeditionInfo {Area="南西", EName="艦隊決戦援護作戦", Time="15:00", Lv=10, RequireShipType=new Dictionary<string, int>() { { LIGHTCRUISER, 1 }, {DESTROYER, 2 } }, ShipNum=6, Fuel=500, Ammunition=500, Steel=200, Bauxite=200, InstantBuildMaterials=2, DevelopmentMaterials=2},
+
+            new ExpeditionInfo {Area="南西", EName="南西方面航空偵察作戦", Time="00:35", Lv=40,SumLv=150, ShipNum=6, Steel=10,Bauxite=30,InstantRepairMaterials=1,FurnitureBox="小1", RequireShipType =new Dictionary<string, int>() { { SEAPLANETENDER, 1 },{ LIGHTCRUISER, 1 },{ DESTROYER,2} }, SumAA=200,SumASW=200,SumViewRange=140 },
 
             new ExpeditionInfo {Area="北方", EName="敵地偵察作戦", Time="00:45", Lv=20, RequireShipType=new Dictionary<string, int>() { { LIGHTCRUISER, 1 }, {DESTROYER, 3 } }, ShipNum=6, Fuel=70, Ammunition=70, Steel=50},
             new ExpeditionInfo {Area="北方", EName="航空機輸送作戦", Time="05:00", Lv=15, RequireShipType=new Dictionary<string, int>() { { AIRCRAFTCARRIER, 1 }, {DESTROYER, 3 } }, ShipNum=6, Steel=300, Bauxite=100, InstantRepairMaterials=1},
@@ -157,7 +233,11 @@ namespace ExpeditionListPlugin
         {
             return CheckShipNum(index) && FlagshipLvCheck(index) && SumLvCheck(index)
                         && RequireShipTypeCheck(index) && RequireItemCheck(index)
-                        && FlagShipTypeCheck(index);
+                        && FlagShipTypeCheck(index)
+                        && RequireSumShipTypeCheck(index)
+                        && SumAACheck(index)
+                        && SumASWCheck(index)
+                        && SumViewRangeCheck(index);
         }
 
         /// <summary>
@@ -222,7 +302,7 @@ namespace ExpeditionListPlugin
         private bool RequireItemCheck(int index)
         {
             if (null == RequireItemNum || null == RequireItemShipNum) return true;
-            foreach(KeyValuePair<string, int> pair in RequireItemShipNum)
+            foreach (KeyValuePair<string, int> pair in RequireItemShipNum)
             {
                 int shipNum = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Where(
                     ship => ship.EquippedItems.Any(
@@ -263,6 +343,66 @@ namespace ExpeditionListPlugin
             var match = regexp.Match(shiptype.Name);
 
             return match.Success;
+        }
+
+        /// <summary>
+        /// 必要合算艦種のチェック（駆または海防合わせて3隻というようなのに使用）
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        private bool RequireSumShipTypeCheck(int index)
+        {
+            //必要合算艦種が設定されていない場合は自動成功
+            if (null == RequireSumShipType) return true;
+
+            int sum = 0;
+            foreach (var siptype in RequireSumShipType)
+            {
+                Regex re = new Regex(siptype);
+                sum += KanColleClient.Current.Homeport.Organization.Fleets[index].Ships
+                     .Where(fleet => re.Match(fleet.Info.ShipType.Name).Success).Count();
+
+                if (sum >= RequireSumShipTypeNum)
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 合計対空値のチェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        private bool SumAACheck(int index)
+        {
+            if (null == SumAA) return true;
+
+            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.AA).Sum(s => s.Current) >= SumAA;
+        }
+
+        /// <summary>
+        /// 合計対潜値のチェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        private bool SumASWCheck(int index)
+        {
+            if (null == SumASW) return true;
+            //南西方面航空偵察作戦の 但し水偵・水爆・飛行艇の対潜値は無効 はまだチェックしない
+            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.ASW).Sum() >= SumASW;
+        }
+
+        /// <summary>
+        /// 合計索敵値のチェック
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        private bool SumViewRangeCheck(int index)
+        {
+            if (null == SumViewRange) return true;
+
+            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.ViewRange).Sum() >= SumViewRange;
         }
     }
 }
