@@ -1,4 +1,5 @@
 ﻿using Grabacr07.KanColleWrapper;
+using Grabacr07.KanColleWrapper.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,12 +142,11 @@ namespace ExpeditionListPlugin
         /// 合計対潜値
         /// </summary>
         public int? SumASW { get; set; }
-        //
+        
         /// <summary>
         /// 合計索敵値
         /// </summary>
         public int? SumViewRange { get; set; }
-
 
         public int? Fuel { get; set; }
         public int? Ammunition { get; set; }
@@ -155,10 +155,12 @@ namespace ExpeditionListPlugin
         public int? InstantBuildMaterials { get; set; }
         public int? InstantRepairMaterials { get; set; }
         public int? DevelopmentMaterials { get; set; }
+        
         /// <summary>
         /// 家具箱
         /// </summary>
         public string FurnitureBox { get; set; }
+
         public bool isFuelNull { get { return Fuel == null; } }
         public bool isAmmunitionNull { get { return Ammunition == null; } }
         public bool isSteelNull { get { return Steel == null; } }
@@ -389,8 +391,19 @@ namespace ExpeditionListPlugin
         private bool SumASWCheck(int index)
         {
             if (null == SumASW) return true;
-            //南西方面航空偵察作戦の 但し水偵・水爆・飛行艇の対潜値は無効 はまだチェックしない
-            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.ASW).Sum() >= SumASW;
+            
+            var not_types = new SlotItemType[] { SlotItemType.水上偵察機, SlotItemType.水上爆撃機, SlotItemType.大型飛行艇 };
+
+            //水偵・水爆・飛行艇の対潜値の合計を取得
+            var not_sum_asw = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(
+                ship => ship.EquippedItems.Where(item => not_types.Any(t => t == item.Item.Info.Type)   //水偵・水爆・飛行艇の絞込み
+                    ).Sum(s => s.Item.Info.ASW)).Sum(); //対潜値の合計
+
+            //すべての装備込み対潜値の合計を取得
+            var sum_asw = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.ASW).Sum();
+
+            //水偵・水爆・飛行艇の対潜値を無効にする
+            return sum_asw - not_sum_asw >= SumASW;
         }
 
         /// <summary>
