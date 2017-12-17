@@ -1,0 +1,4 @@
+﻿# ExpeditionListPluginMod
+ExpeditionListPluginの改造版です
+
+兵站強化任務、海峡警備行動、長時間対潜警戒、南西方面航空偵察作戦の追加に対応しています
