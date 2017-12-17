@@ -100,26 +100,37 @@ namespace ExpeditionListPlugin
                 return match.Success ? match.Groups[1].ToString() : "";
             }
         }
+
+        /// <summary>
+        /// 必要艦種テキスト
+        /// </summary>
         public string RequireShipTypeText
         {
             get
             {
-                if (null == RequireShipType) return "";
+                if (null == RequireShipType) return this.RequireSumShipTypeText;
 
                 Regex re = new Regex("<(.+)>");
                 var list = new List<string>();
-                foreach (KeyValuePair<string, int> pair in RequireShipType.First())
+                var list2 = new List<string>();
+                foreach (var r in RequireShipType)
                 {
-                    String regexText = pair.Key;
-                    Match match = re.Match(regexText);
-                    if (match.Success)
+                    foreach (var pair in r)
                     {
-                        list.Add(match.Groups[1].Value + pair.Value);
+                        String regexText = pair.Key;
+                        Match match = re.Match(regexText);
+                        if (match.Success)
+                        {
+                            list.Add(match.Groups[1].Value + pair.Value);
+                        }
                     }
+                    list2.Add(string.Join(" ", list));
+                    list.Clear();
                 }
-                return string.Join(" ", list);
+                return string.Join(" or ", list2) + " " + this.RequireSumShipTypeText;
             }
         }
+
         public string RequireDrum
         {
             get
@@ -138,6 +149,30 @@ namespace ExpeditionListPlugin
         /// 必要合算艦種数
         /// </summary>
         public int RequireSumShipTypeNum { get; set; }
+
+        /// <summary>
+        /// 必要合算艦種テキスト
+        /// </summary>
+        public string RequireSumShipTypeText
+        {
+            get
+            {
+                if (null == RequireSumShipType) return "";
+
+                Regex re = new Regex("<(.+)>");
+                var list = new List<string>();
+                foreach (var pair in RequireSumShipType)
+                {
+                    String regexText = pair;
+                    Match match = re.Match(regexText);
+                    if (match.Success)
+                    {
+                        list.Add(match.Groups[1].Value);
+                    }
+                }
+                return string.Join(",", list) +"合計" + RequireSumShipTypeNum.ToString();
+            }
+        }
 
         /// <summary>
         /// 合計対空値
@@ -312,10 +347,14 @@ namespace ExpeditionListPlugin
         {
             if (null == RequireShipType) return true;
 
+            string SHIPTYPE_ESCORTECARRIER = "護衛空母";
+            //大鷹、大鷹改二を護衛空母として扱う
+            var shiptype_names = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Info.Name.StartsWith("大鷹") ? SHIPTYPE_ESCORTECARRIER : s.Info.ShipType.Name);
+
             foreach (var rst in RequireShipType)
-            {
-                if (rst.All(typ => KanColleClient.Current.Homeport.Organization.Fleets[index].Ships
-                     .Where(fleet => new Regex(typ.Key).Match(fleet.Info.ShipType.Name).Success).Count() >= typ.Value) == true)
+            {  
+                if (rst.All(typ => shiptype_names
+                     .Where(typename => new Regex(typ.Key).Match(typename).Success).Count() >= typ.Value) == true)
                 {
                     return true;
                 }
