@@ -26,5 +26,26 @@ namespace ExpeditionListPlugin.Tests
             Console.WriteLine(s);
             s.Is("軽1 駆,海防合計3");
         }
+
+        [TestMethod()]
+        public void RequireSumParamText()
+        {
+            string s;
+            s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "兵站強化任務").RequireSumParamText;
+            Console.WriteLine(s);
+            s.Is("");
+
+            s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "海峡警備行動").RequireSumParamText;
+            Console.WriteLine(s);
+            s.Is("対空70/対潜180");
+
+            s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "長時間対潜警戒").RequireSumParamText;
+            Console.WriteLine(s);
+            s.Is("対潜280");
+
+            s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "南西方面航空偵察作戦").RequireSumParamText;
+            Console.WriteLine(s);
+            s.Is("対空200/対潜200/索敵140");
+        }
     }
 }

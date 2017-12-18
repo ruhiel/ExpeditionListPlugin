@@ -78,6 +78,7 @@ namespace ExpeditionListPlugin
         public int Lv { get; set; }
         public int? SumLv { get; set; }
         public int ShipNum { get; set; }
+
         /// <summary>
         /// 必要艦種
         /// </summary>
@@ -170,7 +171,7 @@ namespace ExpeditionListPlugin
                         list.Add(match.Groups[1].Value);
                     }
                 }
-                return string.Join(",", list) +"合計" + RequireSumShipTypeNum.ToString();
+                return string.Join(",", list) + "合計" + RequireSumShipTypeNum.ToString();
             }
         }
 
@@ -188,6 +189,35 @@ namespace ExpeditionListPlugin
         /// 合計索敵値
         /// </summary>
         public int? SumViewRange { get; set; }
+
+        enum Parameter
+        {
+            AA, ASW, ViewRange
+        }
+
+        /// <summary>
+        /// 第二～四艦隊パラメータ
+        /// </summary>
+        /// <value>
+        /// 対空、対潜、索敵が要件を満たしているか。条件がない場合はnull
+        /// </value>
+        Dictionary<int, bool?[]> isParameter { get; set; } = new Dictionary<int, bool?[]>();
+
+        /// <summary>
+        /// 必須合計パラメータ
+        /// </summary>
+        public string RequireSumParamText
+        {
+            get
+            {
+                var buf = new string[] {
+                    SumAA != null ? "対空" + SumAA.ToString() : "",
+                    SumASW != null ? "対潜" + SumASW.ToString() : "",
+                    SumViewRange != null ? "索敵" + SumViewRange.ToString() : ""};
+
+                return string.Join("/", buf.Where(s => s.Length > 0));
+            }
+        }
 
         public int? Fuel { get; set; }
         public int? Ammunition { get; set; }
@@ -215,7 +245,7 @@ namespace ExpeditionListPlugin
             new ExpeditionInfo {Area="鎮守", EName="対潜警戒任務", Time="00:50", Lv=3, RequireShipType=new[] {
              new Dictionary<string, int> { { LIGHTCRUISER, 1 }, { DESTROYER, 2 } },
              new Dictionary<string, int> { { DESTROYER, 1 },{ ESCORT ,3 } } ,
-             new Dictionary<string, int> { { LIGHTCRUISER, 1 },{ ESCORT ,2 } }, 
+             new Dictionary<string, int> { { LIGHTCRUISER, 1 },{ ESCORT ,2 } },
              new Dictionary<string, int> { { TRAININGCRUISER, 1 }, { ESCORT, 2 } },
              new Dictionary<string, int> { { ESCORTECARRIER, 1 }, { ESCORT, 2 } },
              new Dictionary<string, int> { { ESCORTECARRIER, 1 }, { DESTROYER, 2 } }
@@ -285,6 +315,21 @@ namespace ExpeditionListPlugin
             isSuccess2 = CheckAll(2);
             isSuccess3 = CheckAll(3);
             isSuccess4 = CheckAll(4);
+
+            CheckParam();
+        }
+
+        private void CheckParam()
+        {
+            for (int i = 2; i <= 4; i++)
+            {
+                var flags = new bool?[3];
+                flags[(int)Parameter.AA] = SumAA != null ? SumAACheck(i) : (bool?)null;
+                flags[(int)Parameter.ASW] = SumASW != null ? SumASWCheck(2) : (bool?)null;
+                flags[(int)Parameter.ViewRange] = SumViewRange != null ? SumViewRangeCheck(2) : (bool?)null;
+
+                isParameter[i] = flags;
+            }
         }
 
         public static ExpeditionInfo[] ExpeditionList
@@ -352,7 +397,7 @@ namespace ExpeditionListPlugin
             var shiptype_names = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Info.Name.StartsWith("大鷹") ? SHIPTYPE_ESCORTECARRIER : s.Info.ShipType.Name);
 
             foreach (var rst in RequireShipType)
-            {  
+            {
                 if (rst.All(typ => shiptype_names
                      .Where(typename => new Regex(typ.Key).Match(typename).Success).Count() >= typ.Value) == true)
                 {
