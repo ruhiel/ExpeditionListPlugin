@@ -190,10 +190,9 @@ namespace ExpeditionListPlugin
         /// </summary>
         public int? SumViewRange { get; set; }
 
-        enum Parameter
-        {
-            AA, ASW, ViewRange
-        }
+        public static readonly string AA = "対空";
+        public static readonly string ASW = "対潜";
+        public static readonly string VIEWRANGE = "索敵";
 
         /// <summary>
         /// 第二～四艦隊パラメータ
@@ -201,7 +200,7 @@ namespace ExpeditionListPlugin
         /// <value>
         /// 対空、対潜、索敵が要件を満たしているか。条件がない場合はnull
         /// </value>
-        Dictionary<int, bool?[]> isParameter { get; set; } = new Dictionary<int, bool?[]>();
+        public Dictionary<int, Dictionary<string, bool?>> isParameter { get; set; } = new Dictionary<int, Dictionary<string, bool?>>();
 
         /// <summary>
         /// 必須合計パラメータ
@@ -211,9 +210,9 @@ namespace ExpeditionListPlugin
             get
             {
                 var buf = new string[] {
-                    SumAA != null ? "対空" + SumAA.ToString() : "",
-                    SumASW != null ? "対潜" + SumASW.ToString() : "",
-                    SumViewRange != null ? "索敵" + SumViewRange.ToString() : ""};
+                    SumAA != null ? AA + SumAA.ToString() : "",
+                    SumASW != null ? ASW + SumASW.ToString() : "",
+                    SumViewRange != null ? VIEWRANGE + SumViewRange.ToString() : ""};
 
                 return string.Join("/", buf.Where(s => s.Length > 0));
             }
@@ -310,6 +309,17 @@ namespace ExpeditionListPlugin
             new ExpeditionInfo {Area="南方", EName="水上機前線輸送", Time="06:50", Lv=25, SumLv=150, RequireShipType=new[] { new Dictionary<string, int> { { LIGHTCRUISER, 1 }, { SEAPLANETENDER, 2 }, {DESTROYER, 2 } } }, ShipNum=6, Fuel=300, Ammunition=300, Steel=0, Bauxite=100, InstantRepairMaterials=1, FurnitureBox="小3", FlagShipType = LIGHTCRUISER},
         };
 
+        public ExpeditionInfo()
+        {
+            for (int i = 2; i <= 4; i++)
+            {
+                isParameter[i] = new Dictionary<string, bool?>();
+                isParameter[i].Add(AA, null);
+                isParameter[i].Add(ASW, null);
+                isParameter[i].Add(VIEWRANGE, null);
+            }
+        }
+
         public void Check()
         {
             isSuccess2 = CheckAll(2);
@@ -323,10 +333,10 @@ namespace ExpeditionListPlugin
         {
             for (int i = 2; i <= 4; i++)
             {
-                var flags = new bool?[3];
-                flags[(int)Parameter.AA] = SumAA != null ? SumAACheck(i) : (bool?)null;
-                flags[(int)Parameter.ASW] = SumASW != null ? SumASWCheck(2) : (bool?)null;
-                flags[(int)Parameter.ViewRange] = SumViewRange != null ? SumViewRangeCheck(2) : (bool?)null;
+                var flags = new Dictionary<string, bool?>();
+                flags[AA] = SumAA != null ? SumAACheck(i) : (bool?)null;
+                flags[ASW] = SumASW != null ? SumASWCheck(i) : (bool?)null;
+                flags[VIEWRANGE] = SumViewRange != null ? SumViewRangeCheck(i) : (bool?)null;
 
                 isParameter[i] = flags;
             }
