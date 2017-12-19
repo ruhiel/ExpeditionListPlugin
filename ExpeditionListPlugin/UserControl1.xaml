@@ -318,7 +318,7 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="12" Text="{Binding RequireShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                    <TextBlock FontSize="12" Text="{Binding RequireShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0" ToolTip="{Binding RequireShipTypeText, Mode=OneWay}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
