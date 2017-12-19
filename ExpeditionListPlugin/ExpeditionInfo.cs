@@ -52,7 +52,7 @@ namespace ExpeditionListPlugin
         /// <summary>
         /// 空母
         /// </summary>
-        public static readonly string AIRCRAFTCARRIER = "(?<空母>正規空母|装甲空母|軽空母|水上機母艦)";
+        public static readonly string AIRCRAFTCARRIER = "(?<空母>正規空母|装甲空母|軽空母|水上機母艦|護衛空母)";
 
         /// <summary>
         /// 海防艦
