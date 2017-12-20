@@ -141,7 +141,7 @@
             </Style>
 
             <DataTemplate x:Key="isParameterDataTemplate">
-                <TextBlock Padding="2,0,0,0" Margin="0,0,0,0">
+                <TextBlock Padding="0,0,2,0" Margin="0,0,0,0">
                 <Run x:Name="ParamName" Text="{Binding Key, Mode=OneWay}" />
                 <Run x:Name="ParamValue" Text="{Binding Value, Mode=OneWay}" />
                 </TextBlock>
@@ -159,7 +159,7 @@
             </DataTemplate>
 
             <ItemsPanelTemplate x:Key="isParameterItemsPanelTemplate">
-                <StackPanel Orientation="Horizontal" />
+                <StackPanel Orientation="Horizontal"/>
             </ItemsPanelTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -280,10 +280,23 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                        <ItemsControl FontSize="12" HorizontalAlignment="Center" Padding="2,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"/>
-                                    </StackPanel>
+                                    <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="第二パラ" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl.ToolTip>
+                                            <ToolTip >
+                                                <ItemsControl ItemsSource="{Binding isParameter[2]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" />
+                                            </ToolTip>
+                                        </ItemsControl.ToolTip>
+                                    </ItemsControl>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -293,10 +306,23 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess3Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                        <ItemsControl FontSize="12" HorizontalAlignment="Center" Padding="2,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"/>
-                                    </StackPanel>
+                                    <TextBlock FontSize="12" Style="{StaticResource isSuccess3Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="第三パラ" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl.ToolTip>
+                                            <ToolTip >
+                                                <ItemsControl ItemsSource="{Binding isParameter[3]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" />
+                                            </ToolTip>
+                                        </ItemsControl.ToolTip>
+                                    </ItemsControl>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -306,10 +332,23 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                        <ItemsControl FontSize="12" HorizontalAlignment="Center" Padding="2,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"/>
-                                    </StackPanel>
+                                    <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="第四パラ" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl.ToolTip>
+                                            <ToolTip >
+                                                <ItemsControl ItemsSource="{Binding isParameter[4]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" />
+                                            </ToolTip>
+                                        </ItemsControl.ToolTip>
+                                    </ItemsControl>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
