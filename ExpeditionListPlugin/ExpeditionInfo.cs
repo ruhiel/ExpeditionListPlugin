@@ -446,12 +446,7 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumAACheck(Fleet fleet)
-        {
-            if (null == SumAA) return true;
-
-            return fleet.Ships.Select(s => s.AA).Sum(s => s.Current) >= SumAA;
-        }
+        private bool SumAACheck(Fleet fleet) => null == SumAA ? true : fleet.Ships.Sum(s => s.AA.Current + s.EquippedItems.Sum(i => i.Item.Info.AA)) >= SumAA;
 
         /// <summary>
         /// 合計対潜値のチェック
