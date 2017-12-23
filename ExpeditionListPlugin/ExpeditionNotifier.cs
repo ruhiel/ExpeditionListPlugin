@@ -19,30 +19,28 @@ namespace ExpeditionListPlugin
 
             var proxy = KanColleClient.Current.Proxy;
             proxy.api_get_member_deck
-                .Subscribe(_ => this.StartExpeditionCheckAction());
+                .Subscribe(_ => StartExpeditionCheckAction());
         }
 
         private void StartExpeditionCheckAction()
         {
-            for(int index = 2; index <= 4; index++)
+            for(var index = 2; index <= 4; index++)
             {
                 if (KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.IsInExecution)
                 {
-                    String name = KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.Mission.Title;
+                    var name = KanColleClient.Current.Homeport.Organization.Fleets[index].Expedition.Mission.Title;
 
                     var list = ExpeditionInfo.ExpeditionList.ToList().Where(expedition => expedition.EName.Equals(name));
 
-                    if (list.Count() > 0)
+                    if (list.Any())
                     {
-                        if (!list.First().CheckAll(index))
+                        if (!list.First().CheckAll(KanColleClient.Current.Homeport.Organization.Fleets[index]))
                         {
-                            Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
-                                Environment.NewLine + "編成を確認してください。");
+                            Notify("ExpeditionStart", "遠征確認", $"第{index}艦隊の[{name}]は失敗する可能性があります。{Environment.NewLine}編成を確認してください。");
                         }
                         else if (KanColleClient.Current.Homeport.Organization.Fleets[index].State.Situation.HasFlag(FleetSituation.InShortSupply))
                         {
-                            Notify("ExpeditionStart", "遠征確認", "第" + index + "艦隊の[" + name + "]は失敗する可能性があります。" +
-                                Environment.NewLine + "艦隊に完全に補給されていない艦娘がいます。");
+                            Notify("ExpeditionStart", "遠征確認", $"第{index}艦隊の[{ name}]は失敗する可能性があります。{Environment.NewLine}艦隊に完全に補給されていない艦娘がいます。");
                         }
                     }
                 }
@@ -51,21 +49,18 @@ namespace ExpeditionListPlugin
         }
 
 
-        private void Notify(string type, string title, string message)
+        private void Notify(string type, string title, string message) => plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)
         {
-            this.plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)
+            Activated = () =>
             {
-                Activated = () =>
+                DispatcherHelper.UIDispatcher.Invoke(() =>
                 {
-                    DispatcherHelper.UIDispatcher.Invoke(() =>
-                    {
-                        var window = Application.Current.MainWindow;
-                        if (window.WindowState == WindowState.Minimized)
-                            window.WindowState = WindowState.Normal;
-                        window.Activate();
-                    });
-                },
-            });
-        }
+                    var window = Application.Current.MainWindow;
+                    if (window.WindowState == WindowState.Minimized)
+                        window.WindowState = WindowState.Normal;
+                    window.Activate();
+                });
+            },
+        });
     }
 }

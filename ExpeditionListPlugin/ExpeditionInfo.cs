@@ -105,41 +105,11 @@ namespace ExpeditionListPlugin
         /// <summary>
         /// 必要艦種テキスト
         /// </summary>
-        public string RequireShipTypeText
-        {
-            get
-            {
-                if (null == RequireShipType) return this.RequireSumShipTypeText;
+        public string RequireShipTypeText => string.Join(" ", new[] { RequireShipTypeTextInner, RequireSumShipTypeText }.Where(x => x != string.Empty));
 
-                Regex re = new Regex("<(.+)>");
-                var list = new List<string>();
-                var list2 = new List<string>();
-                foreach (var r in RequireShipType)
-                {
-                    foreach (var pair in r)
-                    {
-                        String regexText = pair.Key;
-                        Match match = re.Match(regexText);
-                        if (match.Success)
-                        {
-                            list.Add(match.Groups[1].Value + pair.Value);
-                        }
-                    }
-                    list2.Add(string.Join(" ", list));
-                    list.Clear();
-                }
-                return string.Join(" or ", list2) + " " + this.RequireSumShipTypeText;
-            }
-        }
+        public string RequireShipTypeTextInner => RequireShipType == null ? string.Empty : string.Join(" or ", RequireShipType.Select(x => string.Join(" ", x.Select(y => $"{Regex.Replace(y.Key, @".+<(.+)>.+", "$1")}{y.Value}"))));
 
-        public string RequireDrum
-        {
-            get
-            {
-                if (null == RequireItemNum || null == RequireItemShipNum) return "";
-                return RequireItemShipNum[DRUMCANISTER] + "隻 " + RequireItemNum[DRUMCANISTER] + "個";
-            }
-        }
+        public string RequireDrum => (null == RequireItemNum || null == RequireItemShipNum) ? string.Empty : $"{RequireItemShipNum[DRUMCANISTER]}隻 {RequireItemNum[DRUMCANISTER]}個";
 
         /// <summary>
         /// 必要合算艦種
@@ -154,26 +124,7 @@ namespace ExpeditionListPlugin
         /// <summary>
         /// 必要合算艦種テキスト
         /// </summary>
-        public string RequireSumShipTypeText
-        {
-            get
-            {
-                if (null == RequireSumShipType) return "";
-
-                Regex re = new Regex("<(.+)>");
-                var list = new List<string>();
-                foreach (var pair in RequireSumShipType)
-                {
-                    String regexText = pair;
-                    Match match = re.Match(regexText);
-                    if (match.Success)
-                    {
-                        list.Add(match.Groups[1].Value);
-                    }
-                }
-                return string.Join(",", list) + "合計" + RequireSumShipTypeNum.ToString();
-            }
-        }
+        public string RequireSumShipTypeText => null == RequireSumShipType ? string.Empty : $"{string.Join(",", RequireSumShipType.Select(x => $"{Regex.Replace(x, @".+<(.+)>.+", "$1")}"))}合計{RequireSumShipTypeNum}";
 
         /// <summary>
         /// 合計対空値
@@ -210,9 +161,9 @@ namespace ExpeditionListPlugin
             get
             {
                 var buf = new string[] {
-                    SumAA != null ? AA + SumAA.ToString() : "",
-                    SumASW != null ? ASW + SumASW.ToString() : "",
-                    SumViewRange != null ? VIEWRANGE + SumViewRange.ToString() : ""};
+                    SumAA != null ? AA + SumAA.ToString() : string.Empty,
+                    SumASW != null ? ASW + SumASW.ToString() : string.Empty,
+                    SumViewRange != null ? VIEWRANGE + SumViewRange.ToString() : string.Empty};
 
                 return string.Join("/", buf.Where(s => s.Length > 0));
             }
@@ -311,7 +262,7 @@ namespace ExpeditionListPlugin
 
         public ExpeditionInfo()
         {
-            for (int i = 2; i <= 4; i++)
+            for (var i = 2; i <= 4; i++)
             {
                 isParameter[i] = new Dictionary<string, bool?>();
                 isParameter[i].Add(AA, null);
@@ -322,21 +273,21 @@ namespace ExpeditionListPlugin
 
         public void Check()
         {
-            isSuccess2 = CheckAll(2);
-            isSuccess3 = CheckAll(3);
-            isSuccess4 = CheckAll(4);
+            isSuccess2 = CheckAll(KanColleClient.Current.Homeport.Organization.Fleets[2]);
+            isSuccess3 = CheckAll(KanColleClient.Current.Homeport.Organization.Fleets[3]);
+            isSuccess4 = CheckAll(KanColleClient.Current.Homeport.Organization.Fleets[4]);
 
             CheckParam();
         }
 
         private void CheckParam()
         {
-            for (int i = 2; i <= 4; i++)
+            for (var i = 2; i <= 4; i++)
             {
                 var flags = new Dictionary<string, bool?>();
-                flags[AA] = SumAA != null ? SumAACheck(i) : (bool?)null;
-                flags[ASW] = SumASW != null ? SumASWCheck(i) : (bool?)null;
-                flags[VIEWRANGE] = SumViewRange != null ? SumViewRangeCheck(i) : (bool?)null;
+                flags[AA] = SumAA != null ? SumAACheck(KanColleClient.Current.Homeport.Organization.Fleets[i]) : (bool?)null;
+                flags[ASW] = SumASW != null ? SumASWCheck(KanColleClient.Current.Homeport.Organization.Fleets[i]) : (bool?)null;
+                flags[VIEWRANGE] = SumViewRange != null ? SumViewRangeCheck(KanColleClient.Current.Homeport.Organization.Fleets[i]) : (bool?)null;
 
                 isParameter[i] = flags;
             }
@@ -348,37 +299,34 @@ namespace ExpeditionListPlugin
             set { _ExpeditionTable = value; }
         }
 
-        public bool CheckAll(int index)
-        {
-            return CheckShipNum(index) && FlagshipLvCheck(index) && SumLvCheck(index)
-                        && RequireShipTypeCheck(index) && RequireItemCheck(index)
-                        && FlagShipTypeCheck(index)
-                        && RequireSumShipTypeCheck(index)
-                        && SumAACheck(index)
-                        && SumASWCheck(index)
-                        && SumViewRangeCheck(index);
-        }
+        public bool CheckAll(Fleet fleet) => CheckShipNum(fleet) &&
+                        FlagshipLvCheck(fleet) &&
+                        SumLvCheck(fleet) &&
+                        RequireShipTypeCheck(fleet) &&
+                        RequireItemCheck(fleet) &&
+                        FlagShipTypeCheck(fleet) &&
+                        RequireSumShipTypeCheck(fleet) &&
+                        SumAACheck(fleet) &&
+                        SumASWCheck(fleet) &&
+                        SumViewRangeCheck(fleet);
 
         /// <summary>
         /// 艦数チェック
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool CheckShipNum(int index)
-        {
-            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length >= ShipNum;
-        }
+        private bool CheckShipNum(Fleet fleet) => fleet.Ships.Length >= ShipNum;
 
         /// <summary>
         /// 旗艦Lvチェック
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool FlagshipLvCheck(int index)
+        private bool FlagshipLvCheck(Fleet fleet)
         {
-            if (KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Length == 0) return false;
+            if (fleet.Ships.Length == 0) return false;
 
-            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.First().Level >= Lv;
+            return fleet.Ships.First().Level >= Lv;
         }
 
         /// <summary>
@@ -386,11 +334,11 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumLvCheck(int index)
+        private bool SumLvCheck(Fleet fleet)
         {
             if (null == SumLv) return true;
 
-            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Level).Sum() >= SumLv;
+            return fleet.Ships.Select(s => s.Level).Sum() >= SumLv;
         }
 
         /// <summary>
@@ -398,18 +346,18 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool RequireShipTypeCheck(int index)
+        private bool RequireShipTypeCheck(Fleet fleet)
         {
             if (null == RequireShipType) return true;
 
-            string SHIPTYPE_ESCORTECARRIER = "護衛空母";
+            var SHIPTYPE_ESCORTECARRIER = "護衛空母";
             //大鷹、大鷹改二を護衛空母として扱う
-            var shiptype_names = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.Info.Name.StartsWith("大鷹") ? SHIPTYPE_ESCORTECARRIER : s.Info.ShipType.Name);
+            var shiptype_names = fleet.Ships.Select(s => s.Info.Name.StartsWith("大鷹") ? SHIPTYPE_ESCORTECARRIER : s.Info.ShipType.Name);
 
             foreach (var rst in RequireShipType)
             {
                 if (rst.All(typ => shiptype_names
-                     .Where(typename => new Regex(typ.Key).Match(typename).Success).Count() >= typ.Value) == true)
+                     .Where(typename => new Regex(typ.Key).Match(typename).Success).Skip(typ.Value - 1).Any()) == true)
                 {
                     return true;
                 }
@@ -423,12 +371,12 @@ namespace ExpeditionListPlugin
         /// </summary{
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool RequireItemCheck(int index)
+        private bool RequireItemCheck(Fleet fleet)
         {
             if (null == RequireItemNum || null == RequireItemShipNum) return true;
-            foreach (KeyValuePair<string, int> pair in RequireItemShipNum)
+            foreach (var pair in RequireItemShipNum)
             {
-                int shipNum = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Where(
+                var shipNum = fleet.Ships.Where(
                     ship => ship.EquippedItems.Any(
                         item => pair.Key.Equals(item.Item.Info.Name))).Count();
 
@@ -437,9 +385,9 @@ namespace ExpeditionListPlugin
                     return false;
                 }
             }
-            foreach (KeyValuePair<string, int> pair in RequireItemNum)
+            foreach (var pair in RequireItemNum)
             {
-                int itemNum = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(
+                var itemNum = fleet.Ships.Select(
                     ship => ship.EquippedItems.Where(
                         item => pair.Key.Equals(item.Item.Info.Name)).Count()).Sum();
 
@@ -456,14 +404,14 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool FlagShipTypeCheck(int index)
+        private bool FlagShipTypeCheck(Fleet fleet)
         {
             if (null == FlagShipType) return true;
 
-            if (0 == KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Count()) return false;
+            if (0 == fleet.Ships.Length) return false;
 
-            var shiptype = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.First().Info.ShipType;
-            Regex regexp = new Regex(FlagShipType);
+            var shiptype = fleet.Ships.First().Info.ShipType;
+            var regexp = new Regex(FlagShipType);
             var match = regexp.Match(shiptype.Name);
 
             return match.Success;
@@ -474,17 +422,17 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool RequireSumShipTypeCheck(int index)
+        private bool RequireSumShipTypeCheck(Fleet fleet)
         {
             //必要合算艦種が設定されていない場合は自動成功
             if (null == RequireSumShipType) return true;
 
-            int sum = 0;
+            var sum = 0;
             foreach (var siptype in RequireSumShipType)
             {
-                Regex re = new Regex(siptype);
-                sum += KanColleClient.Current.Homeport.Organization.Fleets[index].Ships
-                     .Where(fleet => re.Match(fleet.Info.ShipType.Name).Success).Count();
+                var re = new Regex(siptype);
+                sum += fleet.Ships
+                     .Where(f => re.Match(f.Info.ShipType.Name).Success).Count();
 
                 if (sum >= RequireSumShipTypeNum)
                     return true;
@@ -498,11 +446,11 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumAACheck(int index)
+        private bool SumAACheck(Fleet fleet)
         {
             if (null == SumAA) return true;
 
-            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.AA).Sum(s => s.Current) >= SumAA;
+            return fleet.Ships.Select(s => s.AA).Sum(s => s.Current) >= SumAA;
         }
 
         /// <summary>
@@ -510,19 +458,19 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumASWCheck(int index)
+        private bool SumASWCheck(Fleet fleet)
         {
             if (null == SumASW) return true;
 
             var not_types = new SlotItemType[] { SlotItemType.水上偵察機, SlotItemType.水上爆撃機, SlotItemType.大型飛行艇 };
 
             //水偵・水爆・飛行艇の対潜値の合計を取得
-            var not_sum_asw = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(
+            var not_sum_asw = fleet.Ships.Select(
                 ship => ship.EquippedItems.Where(item => not_types.Any(t => t == item.Item.Info.Type)   //水偵・水爆・飛行艇の絞込み
                     ).Sum(s => s.Item.Info.ASW)).Sum(); //対潜値の合計
 
             //すべての装備込み対潜値の合計を取得
-            var sum_asw = KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.ASW).Sum();
+            var sum_asw = fleet.Ships.Select(s => s.ASW).Sum();
 
             //水偵・水爆・飛行艇の対潜値を無効にする
             return sum_asw - not_sum_asw >= SumASW;
@@ -533,11 +481,11 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumViewRangeCheck(int index)
+        private bool SumViewRangeCheck(Fleet fleet)
         {
             if (null == SumViewRange) return true;
 
-            return KanColleClient.Current.Homeport.Organization.Fleets[index].Ships.Select(s => s.ViewRange).Sum() >= SumViewRange;
+            return fleet.Ships.Select(s => s.ViewRange).Sum() >= SumViewRange;
         }
     }
 }
