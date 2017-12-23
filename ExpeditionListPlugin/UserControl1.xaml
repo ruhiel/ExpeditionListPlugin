@@ -139,6 +139,28 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
+            <DataTemplate x:Key="isParameterDataTemplate">
+                <TextBlock Padding="0,0,2,0" Margin="0,0,0,0">
+                <Run x:Name="ParamName" Text="{Binding Key, Mode=OneWay}" />
+                <Run x:Name="ParamValue" Text="{Binding Value, Mode=OneWay}" />
+                </TextBlock>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Value}" Value="true">
+                        <Setter TargetName="ParamValue" Property="Text" Value="○"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Value}" Value="false">
+                        <Setter TargetName="ParamValue" Property="Text" Value="×"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Value}" Value="{x:Null}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <ItemsPanelTemplate x:Key="isParameterItemsPanelTemplate">
+                <StackPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -262,6 +284,22 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn Width="54">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="第二パラ" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl.ToolTip>
+                                            <ToolTip >
+                                                <ItemsControl ItemsSource="{Binding isParameter[2]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
+                                            </ToolTip>
+                                        </ItemsControl.ToolTip>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="auto">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="第三成否" HorizontalAlignment="Center"/>
@@ -272,6 +310,22 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn Width="54">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="第三パラ" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl.ToolTip>
+                                            <ToolTip >
+                                                <ItemsControl ItemsSource="{Binding isParameter[3]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
+                                            </ToolTip>
+                                        </ItemsControl.ToolTip>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="auto">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="第四成否" HorizontalAlignment="Center"/>
@@ -279,6 +333,22 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="54">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="第四パラ" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl.ToolTip>
+                                            <ToolTip >
+                                                <ItemsControl ItemsSource="{Binding isParameter[4]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
+                                            </ToolTip>
+                                        </ItemsControl.ToolTip>
+                                    </ItemsControl>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -318,7 +388,11 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="12" Text="{Binding RequireShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                    <TextBlock FontSize="12" Text="{Binding RequireShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock Text="{Binding RequireShipTypeText, Mode=OneWay}" Foreground="{DynamicResource ForegroundBrushKey}"/>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
