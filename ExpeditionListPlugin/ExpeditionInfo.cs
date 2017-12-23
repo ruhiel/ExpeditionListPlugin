@@ -105,41 +105,11 @@ namespace ExpeditionListPlugin
         /// <summary>
         /// 必要艦種テキスト
         /// </summary>
-        public string RequireShipTypeText
-        {
-            get
-            {
-                if (null == RequireShipType) return this.RequireSumShipTypeText;
+        public string RequireShipTypeText => string.Join(" ", new[] { RequireShipTypeTextInner, RequireSumShipTypeText }.Where(x => x != string.Empty));
 
-                Regex re = new Regex("<(.+)>");
-                var list = new List<string>();
-                var list2 = new List<string>();
-                foreach (var r in RequireShipType)
-                {
-                    foreach (var pair in r)
-                    {
-                        String regexText = pair.Key;
-                        Match match = re.Match(regexText);
-                        if (match.Success)
-                        {
-                            list.Add(match.Groups[1].Value + pair.Value);
-                        }
-                    }
-                    list2.Add(string.Join(" ", list));
-                    list.Clear();
-                }
-                return string.Join(" or ", list2) + " " + this.RequireSumShipTypeText;
-            }
-        }
+        public string RequireShipTypeTextInner => RequireShipType == null ? string.Empty : string.Join(" or ", RequireShipType.Select(x => string.Join(" ", x.Select(y => $"{Regex.Replace(y.Key, @".+<(.+)>.+", "$1")}{y.Value}"))));
 
-        public string RequireDrum
-        {
-            get
-            {
-                if (null == RequireItemNum || null == RequireItemShipNum) return "";
-                return RequireItemShipNum[DRUMCANISTER] + "隻 " + RequireItemNum[DRUMCANISTER] + "個";
-            }
-        }
+        public string RequireDrum => (null == RequireItemNum || null == RequireItemShipNum) ? string.Empty : $"{RequireItemShipNum[DRUMCANISTER]}隻 {RequireItemNum[DRUMCANISTER]}個";
 
         /// <summary>
         /// 必要合算艦種
@@ -154,26 +124,7 @@ namespace ExpeditionListPlugin
         /// <summary>
         /// 必要合算艦種テキスト
         /// </summary>
-        public string RequireSumShipTypeText
-        {
-            get
-            {
-                if (null == RequireSumShipType) return "";
-
-                Regex re = new Regex("<(.+)>");
-                var list = new List<string>();
-                foreach (var pair in RequireSumShipType)
-                {
-                    String regexText = pair;
-                    Match match = re.Match(regexText);
-                    if (match.Success)
-                    {
-                        list.Add(match.Groups[1].Value);
-                    }
-                }
-                return string.Join(",", list) + "合計" + RequireSumShipTypeNum.ToString();
-            }
-        }
+        public string RequireSumShipTypeText => null == RequireSumShipType ? string.Empty : $"{string.Join(",", RequireSumShipType.Select(x => $"{Regex.Replace(x, @".+<(.+)>.+", "$1")}"))}合計{RequireSumShipTypeNum}";
 
         /// <summary>
         /// 合計対空値
