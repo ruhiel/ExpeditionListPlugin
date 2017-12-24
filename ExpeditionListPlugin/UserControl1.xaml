@@ -254,7 +254,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto">
+                        <GridViewColumn Width="132">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="遠征名" HorizontalAlignment="Center" />
                             </GridViewColumn.Header>
@@ -382,6 +382,16 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="12" Text="旗艦" HorizontalAlignment="Center"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="12" Text="{Binding FlagShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="95">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="必要艦艇" HorizontalAlignment="Center"/>
@@ -393,16 +403,6 @@
                                             <TextBlock Text="{Binding RequireShipTypeText, Mode=OneWay}" Foreground="{DynamicResource ForegroundBrushKey}"/>
                                         </TextBlock.ToolTip>
                                     </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.Header>
-                                <TextBlock FontSize="12" Text="旗艦艦種" HorizontalAlignment="Center"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontSize="12" Text="{Binding FlagShipTypeText, Mode=OneWay}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
