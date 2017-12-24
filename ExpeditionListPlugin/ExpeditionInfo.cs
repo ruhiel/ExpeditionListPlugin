@@ -202,7 +202,12 @@ namespace ExpeditionListPlugin
                     { new Tuple<string, int>[] {Tuple.Create(ESCORT, 2)}, new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(TRAININGCRUISER, 1) } },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORTECARRIER, 1)}, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2), Tuple.Create(ESCORT, 2) } },
                 }, ShipNum=3, Ammunition=60, InstantRepairMaterials=1, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="鎮守", EName="海上護衛任務", Time="01:30", Lv=3, RequireShipType = new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Fuel=200, Ammunition=200, Steel=20, Bauxite=20, },
+            new ExpeditionInfo {Area="鎮守", EName="海上護衛任務", Time="01:30", Lv=3, RequireShipType = new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
+                    { new Tuple<string, int>[] {Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2)}, null },
+                    { new Tuple<string, int>[] {Tuple.Create(DESTROYER, 1), Tuple.Create(ESCORT, 3)}, null },
+                    { new Tuple<string, int>[] {Tuple.Create(ESCORT, 2)}, new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(TRAININGCRUISER, 1) } },
+                    { new Tuple<string, int>[] {Tuple.Create(ESCORTECARRIER, 1)}, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2), Tuple.Create(ESCORT, 2) } },
+                }, ShipNum=4, Fuel=200, Ammunition=200, Steel=20, Bauxite=20, },
             new ExpeditionInfo {Area="鎮守", EName="防空射撃演習", Time="00:40", Lv=4, ShipNum=4, Bauxite=80, FurnitureBox="小1"},
             new ExpeditionInfo {Area="鎮守", EName="観艦式予行", Time="01:00", Lv=5,ShipNum=6, Steel=50, Bauxite=30, InstantBuildMaterials=1},
             new ExpeditionInfo {Area="鎮守", EName="観艦式", Time="03:00", Lv=6, ShipNum=6, Fuel=50, Ammunition=100, Steel=50, Bauxite=50, InstantBuildMaterials=2, DevelopmentMaterials=1},

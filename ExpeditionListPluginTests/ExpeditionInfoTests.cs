@@ -33,7 +33,7 @@ namespace ExpeditionListPlugin.Tests
 
             s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "海上護衛任務").RequireShipTypeText;
             Console.WriteLine(s);
-            Assert.AreEqual("軽1駆2", s);
+            Assert.AreEqual("軽1駆2 駆1海防3 海防2軽1or練1 護母1駆2or海防2", s);
 
             s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "防空射撃演習").RequireShipTypeText;
             Console.WriteLine(s);
