@@ -16,7 +16,7 @@ namespace ExpeditionListPlugin.Tests
         {
             var s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "対潜警戒任務").RequireShipTypeText;
             Console.WriteLine(s);
-            Assert.AreEqual("軽1 駆2 or 駆1 海防3 or 軽1 海防2 or 練1 海防2 or 護母1 海防2 or 護母1 駆2", s);
+            Assert.AreEqual("軽1駆2 駆1海防3 海防2軽1or練1 護母1駆2or海防2", s);
 
             s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "兵站強化任務").RequireShipTypeText;
             Console.WriteLine(s);
@@ -24,7 +24,7 @@ namespace ExpeditionListPlugin.Tests
 
             s = ExpeditionInfo._ExpeditionTable.First(t => t.EName == "長時間対潜警戒").RequireShipTypeText;
             Console.WriteLine(s);
-            Assert.AreEqual("軽1 駆,海防合計3", s);
+            Assert.AreEqual("軽1/駆,海防合計3", s);
         }
 
         [TestMethod]
