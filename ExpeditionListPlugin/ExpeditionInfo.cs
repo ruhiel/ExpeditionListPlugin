@@ -465,11 +465,6 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumViewRangeCheck(Fleet fleet)
-        {
-            if (null == SumViewRange) return true;
-
-            return fleet.Ships.Select(s => s.ViewRange).Sum() >= SumViewRange;
-        }
+        private bool SumViewRangeCheck(Fleet fleet) => null == SumViewRange ? true : fleet.Ships.Sum(s => s.ViewRange + s.EquippedItems.Sum(e => e.Item.Info.ViewRange)) >= SumViewRange;
     }
 }
