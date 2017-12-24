@@ -351,8 +351,8 @@ namespace ExpeditionListPlugin
             if (null == RequireShipType) return true;
 
             return RequireShipType.Any(x =>
-                x.Key.All(y => fleet.Ships.Count(i => GetShipType(i) == Regex.Replace(y.Item1, @".+<(.+)>.+", "$1")) >= y.Item2) &&
-                (x.Value == null ? true : x.Value.Any(z => fleet.Ships.Count(j => GetShipType(j) == Regex.Replace(z.Item1, @".+<(.+)>.+", "$1")) >= z.Item2)));
+                x.Key.All(y => fleet.Ships.Count(i => Regex.IsMatch(GetShipType(i), y.Item1)) >= y.Item2) &&
+                (x.Value == null ? true : x.Value.Any(z => fleet.Ships.Count(j => Regex.IsMatch(z.Item1, GetShipType(j))) >= z.Item2)));
         }
 
         /// <summary>
