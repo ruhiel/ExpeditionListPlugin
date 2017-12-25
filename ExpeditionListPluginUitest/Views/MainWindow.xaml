@@ -187,6 +187,28 @@
             <ItemsPanelTemplate x:Key="isParameterItemsPanelTemplate">
                 <StackPanel Orientation="Horizontal"/>
             </ItemsPanelTemplate>
+
+            <Style x:Key="isParameter2Style" TargetType="ItemsControl">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding isParameterValid[2]}" Value="false">
+                        <Setter Property="Background" Value="red"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="isParameter3Style" TargetType="ItemsControl">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding isParameterValid[3]}" Value="false">
+                        <Setter Property="Background" Value="red"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="isParameter4Style" TargetType="ItemsControl">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding isParameterValid[4]}" Value="false">
+                        <Setter Property="Background" Value="red"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -316,7 +338,7 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                    <ItemsControl FontSize="12" Style="{StaticResource isParameter2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
                                         <ItemsControl.ToolTip>
                                             <ToolTip >
                                                 <ItemsControl ItemsSource="{Binding isParameter[2]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
@@ -342,7 +364,7 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                    <ItemsControl FontSize="12" Style="{StaticResource isParameter3Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
                                         <ItemsControl.ToolTip>
                                             <ToolTip >
                                                 <ItemsControl ItemsSource="{Binding isParameter[3]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
@@ -368,7 +390,7 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ItemsControl FontSize="12" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                    <ItemsControl FontSize="12" Style="{StaticResource isParameter4Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
                                         <ItemsControl.ToolTip>
                                             <ToolTip >
                                                 <ItemsControl ItemsSource="{Binding isParameter[4]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>

@@ -153,6 +153,13 @@ namespace ExpeditionListPlugin
             param.Add(ExpeditionInfo.VIEWRANGE, true);
 
             list.First(t => t.EName == "対潜警戒任務").isParameter[2] = param;
+            list.First(t => t.EName == "対潜警戒任務").isParameter[3] = param;
+
+            param = new Dictionary<string, bool?>();
+            param[ExpeditionInfo.AA] = true;
+            param[ExpeditionInfo.ASW] = true;
+            param[ExpeditionInfo.VIEWRANGE] = true;
+            list.First(t => t.EName == "対潜警戒任務").isParameter[4] = param;
 
             ExpeditionInfos = list;
         }
