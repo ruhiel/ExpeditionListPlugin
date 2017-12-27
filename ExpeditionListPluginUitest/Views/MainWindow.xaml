@@ -13,8 +13,7 @@
         Foreground="{DynamicResource ActiveForegroundBrushKey}"
 
         Title="MainWindow" Height="350" Width="800">
-    <!--xmlns:controls="clr-namespace:MetroTrilithon.UI.Controls;assembly=MetroTrilithon.Desktop"-->
-    
+
     <Window.DataContext>
         <vm:ExpeditionViewModel/>
     </Window.DataContext>
@@ -322,81 +321,60 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto">
+                        <GridViewColumn Width="90">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="第二成否" HorizontalAlignment="Center"/>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="54">
-                            <GridViewColumn.Header>
-                                <TextBlock FontSize="12" Text="第二パラ" HorizontalAlignment="Center"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ItemsControl FontSize="12" Style="{StaticResource isParameter2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
-                                        <ItemsControl.ToolTip>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        </ItemsControl>
+                                        <StackPanel.ToolTip>
                                             <ToolTip >
                                                 <ItemsControl ItemsSource="{Binding isParameter[2]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
                                             </ToolTip>
-                                        </ItemsControl.ToolTip>
-                                    </ItemsControl>
+                                        </StackPanel.ToolTip>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto">
+                        <GridViewColumn Width="90">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="第三成否" HorizontalAlignment="Center"/>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="12" Style="{StaticResource isSuccess3Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="54">
-                            <GridViewColumn.Header>
-                                <TextBlock FontSize="12" Text="第三パラ" HorizontalAlignment="Center"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ItemsControl FontSize="12" Style="{StaticResource isParameter3Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
-                                        <ItemsControl.ToolTip>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess3Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter3Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        </ItemsControl>
+                                        <StackPanel.ToolTip>
                                             <ToolTip >
                                                 <ItemsControl ItemsSource="{Binding isParameter[3]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
                                             </ToolTip>
-                                        </ItemsControl.ToolTip>
-                                    </ItemsControl>
+                                        </StackPanel.ToolTip>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto">
+                        <GridViewColumn Width="90">
                             <GridViewColumn.Header>
                                 <TextBlock FontSize="12" Text="第四成否" HorizontalAlignment="Center"/>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="54">
-                            <GridViewColumn.Header>
-                                <TextBlock FontSize="12" Text="第四パラ" HorizontalAlignment="Center"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ItemsControl FontSize="12" Style="{StaticResource isParameter4Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
-                                        <ItemsControl.ToolTip>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter4Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        </ItemsControl>
+                                        <StackPanel.ToolTip>
                                             <ToolTip >
                                                 <ItemsControl ItemsSource="{Binding isParameter[4]}"  ItemTemplate="{DynamicResource isParameterDataTemplate}" Foreground="{DynamicResource ForegroundBrushKey}"/>
                                             </ToolTip>
-                                        </ItemsControl.ToolTip>
-                                    </ItemsControl>
+                                        </StackPanel.ToolTip>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

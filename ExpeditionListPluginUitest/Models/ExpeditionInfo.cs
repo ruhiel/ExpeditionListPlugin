@@ -167,15 +167,16 @@ namespace ExpeditionListPlugin
         {
             get
             {
-                var pa = new Dictionary<int, bool>();
                 for (var i = 2; i <= 4; i++)
                 {
-                    pa[i] = isParameter[i].Any(p => p.Value == false) == true ? false : true;
+                    _isParameterValid[i] = isParameter[i].Any(p => p.Value == false) == true ? false : true;
                 }
 
-                return pa;
+                return _isParameterValid;
             }
         }
+
+        private Dictionary<int, bool> _isParameterValid = new Dictionary<int, bool>();
 
         /// <summary>
         /// 必須合計パラメータ
