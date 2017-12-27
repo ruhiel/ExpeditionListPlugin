@@ -127,6 +127,25 @@ namespace ExpeditionListPlugin
         }
         #endregion
 
+
+        #region isVisibleParameter変更通知プロパティ
+        private bool _isVisibleParameter = true;
+
+        public bool isVisibleParameter
+        {
+            get
+            { return _isVisibleParameter; }
+            set
+            { 
+                if (_isVisibleParameter == value)
+                    return;
+                _isVisibleParameter = value;
+                RaisePropertyChanged(nameof(isVisibleParameter));
+            }
+        }
+        #endregion
+
+
         //private readonly ExpeditionNotifier notifier;
 
         /*public ExpeditionViewModel(ExpeditionListPlugin plugin)

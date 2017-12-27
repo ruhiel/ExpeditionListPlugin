@@ -63,6 +63,7 @@
                 <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.Text.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <Style x:Key="isSuccess2Style" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding isSuccess2}" Value="true">
@@ -235,6 +236,9 @@
                             <CheckBox Content="全海域"
 									  IsChecked="{Binding isAllArea, Mode=TwoWay}"
 									  Margin="10,0" />
+                            <CheckBox Content="パラメータ成否表示"
+									  IsChecked="{Binding isVisibleParameter, Mode=TwoWay}"
+									  Margin="10,0" />
                         </WrapPanel>
                         <WrapPanel Grid.Row="1" Margin="3">
                             <CheckBox Content="鎮守府"
@@ -253,13 +257,13 @@
 									  IsChecked="{Binding isArea5Contain, Mode=TwoWay}"
 									  Margin="10,0" />
                         </WrapPanel>
-                        <!--<WrapPanel Grid.Row="2" Margin="3">
-                                <controls:CallMethodButton Content="鎮守府" MethodName="SetArea" MethodParameter="鎮守"/>
-                                <controls:CallMethodButton Content="南西" MethodName="SetArea" MethodParameter="南西"/>
-                                <controls:CallMethodButton Content="北方" MethodName="SetArea" MethodParameter="北方"/>
-                                <controls:CallMethodButton Content="西方" MethodName="SetArea" MethodParameter="西方"/>
-                                <controls:CallMethodButton Content="南方" MethodName="SetArea" MethodParameter="南方"/>
-                            </WrapPanel>-->
+                        <WrapPanel Grid.Row="2" Margin="3">
+                            <Button Content="鎮守府" />
+                            <Button Content="南西" />
+                            <Button Content="北方" />
+                            <Button Content="西方" />
+                            <Button Content="南方" />
+                        </WrapPanel>
                     </Grid>
 
                 </Border>
@@ -287,6 +291,7 @@
                                 <Setter Property="Background" Value="DarkGreen"></Setter>
                             </Trigger>
                         </Style.Triggers>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.View>
@@ -327,9 +332,11 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Transparent">
+                                        <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0"/>
+                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" 
+                                                      ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"
+                                                      Visibility="{Binding DataContext.isVisibleParameter, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" >
                                         </ItemsControl>
                                         <StackPanel.ToolTip>
                                             <ToolTip >
@@ -346,9 +353,11 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Transparent">
                                         <TextBlock FontSize="12" Style="{StaticResource isSuccess3Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter3Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter3Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" 
+                                                      ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"
+                                                      Visibility="{Binding DataContext.isVisibleParameter, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" >
                                         </ItemsControl>
                                         <StackPanel.ToolTip>
                                             <ToolTip >
@@ -365,9 +374,11 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Transparent">
                                         <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
-                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter4Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
+                                        <ItemsControl FontSize="12" Style="{StaticResource isParameter4Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" 
+                                                      ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"
+                                                      Visibility="{Binding DataContext.isVisibleParameter, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" >
                                         </ItemsControl>
                                         <StackPanel.ToolTip>
                                             <ToolTip >
