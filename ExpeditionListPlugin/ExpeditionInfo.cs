@@ -158,6 +158,27 @@ namespace ExpeditionListPlugin
         public Dictionary<int, Dictionary<string, bool?>> isParameter { get; set; } = new Dictionary<int, Dictionary<string, bool?>>();
 
         /// <summary>
+        /// 第二～四艦隊パラメータの要件を満たしているか
+        /// </summary>
+        /// <value>
+        /// 対空、対潜、索敵がひとつでもfalseの場合はfalseそうでない場合はtrue
+        /// </value>
+        public Dictionary<int,bool> isParameterValid
+        {
+            get
+            {
+                for (var i = 2; i <= 4; i++)
+                {
+                    _isParameterValid[i] = isParameter[i].Any(p => p.Value == false) == true ? false : true;
+                }
+
+                return _isParameterValid;
+            }
+        }
+
+        private Dictionary<int, bool> _isParameterValid = new Dictionary<int, bool>();
+
+        /// <summary>
         /// 必須合計パラメータ
         /// </summary>
         public string RequireSumParamText

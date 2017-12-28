@@ -236,9 +236,6 @@
                             <CheckBox Content="全海域"
 									  IsChecked="{Binding isAllArea, Mode=TwoWay}"
 									  Margin="10,0" />
-                            <CheckBox Content="パラメータ成否表示"
-									  IsChecked="{Binding isVisibleParameter, Mode=TwoWay}"
-									  Margin="10,0" />
                         </WrapPanel>
                         <WrapPanel Grid.Row="1" Margin="3">
                             <CheckBox Content="鎮守府"
@@ -332,11 +329,10 @@
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Transparent">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                                         <TextBlock FontSize="12" Style="{StaticResource isSuccess2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="0,0,0,0"/>
                                         <ItemsControl FontSize="12" Style="{StaticResource isParameter2Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" 
-                                                      ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"
-                                                      Visibility="{Binding DataContext.isVisibleParameter, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" >
+                                                      ItemsSource="{Binding isParameter[2]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
                                         </ItemsControl>
                                         <StackPanel.ToolTip>
                                             <ToolTip >
@@ -356,8 +352,7 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Transparent">
                                         <TextBlock FontSize="12" Style="{StaticResource isSuccess3Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
                                         <ItemsControl FontSize="12" Style="{StaticResource isParameter3Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" 
-                                                      ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"
-                                                      Visibility="{Binding DataContext.isVisibleParameter, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" >
+                                                      ItemsSource="{Binding isParameter[3]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
                                         </ItemsControl>
                                         <StackPanel.ToolTip>
                                             <ToolTip >
@@ -377,8 +372,7 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Transparent">
                                         <TextBlock FontSize="12" Style="{StaticResource isSuccess4Style}" HorizontalAlignment="Center" Padding="0,0,0,0" Margin="0,0,0,0"/>
                                         <ItemsControl FontSize="12" Style="{StaticResource isParameter4Style}" HorizontalAlignment="Stretch" Padding="0,0,0,0" Margin="2,0,0,0" 
-                                                      ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}"
-                                                      Visibility="{Binding DataContext.isVisibleParameter, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" >
+                                                      ItemsSource="{Binding isParameter[4]}" ItemTemplate="{DynamicResource isParameterDataTemplate}" ItemsPanel="{DynamicResource isParameterItemsPanelTemplate}">
                                         </ItemsControl>
                                         <StackPanel.ToolTip>
                                             <ToolTip >
