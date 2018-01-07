@@ -71,7 +71,8 @@ namespace ExpeditionListPlugin
 
         public string Area { get; set; }
         public string EName { get; set; }
-        public string Time { get; set; }
+        public TimeSpan TimeSpan { get; set; }
+        public string Time => $"{TimeSpan.TotalMinutes / 60:00}{TimeSpan.TotalMinutes % 60:00}";
         public bool isSuccess2 { get; set; } = false;
         public bool isSuccess3 { get; set; } = false;
         public bool isSuccess4 { get; set; } = false;
@@ -93,12 +94,15 @@ namespace ExpeditionListPlugin
         {
             get
             {
-                if (null == FlagShipType) return "";
+                if (null == FlagShipType)
+                {
+                    return string.Empty;
+                }
 
-                Regex regexp = new Regex("<(.+)>(.+)");
+                var regexp = new Regex("<(.+)>(.+)");
                 var match = regexp.Match(FlagShipType);
 
-                return match.Success ? match.Groups[1].ToString() : "";
+                return match.Success ? match.Groups[1].ToString() : string.Empty;
             }
         }
 
@@ -214,69 +218,69 @@ namespace ExpeditionListPlugin
 
         public static ExpeditionInfo[] _ExpeditionTable = new ExpeditionInfo[]
         {
-            new ExpeditionInfo {Area="鎮守", EName="練習航海", Time="00:15", Lv=1, ShipNum=2, Ammunition=30},
-            new ExpeditionInfo {Area="鎮守", EName="長距離練習航海", Time="00:30", Lv=2, ShipNum=4, Ammunition=100, Steel=30, InstantRepairMaterials=1},
-            new ExpeditionInfo {Area="鎮守", EName="警備任務", Time="00:20", Lv=3, ShipNum=3, Fuel=30, Ammunition=30, Steel=40},
-            new ExpeditionInfo {Area="鎮守", EName="対潜警戒任務", Time="00:50", Lv=3, RequireShipType= new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
+            new ExpeditionInfo {Area="鎮守", EName="練習航海", TimeSpan=new TimeSpan(00, 15, 00), Lv=1, ShipNum=2, Ammunition=30},
+            new ExpeditionInfo {Area="鎮守", EName="長距離練習航海", TimeSpan=new TimeSpan(00, 30, 00), Lv=2, ShipNum=4, Ammunition=100, Steel=30, InstantRepairMaterials=1},
+            new ExpeditionInfo {Area="鎮守", EName="警備任務", TimeSpan=new TimeSpan(00, 20, 00), Lv=3, ShipNum=3, Fuel=30, Ammunition=30, Steel=40},
+            new ExpeditionInfo {Area="鎮守", EName="対潜警戒任務", TimeSpan=new TimeSpan(00, 50, 00), Lv=3, RequireShipType= new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
                     { new Tuple<string, int>[] {Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2)}, null },
                     { new Tuple<string, int>[] {Tuple.Create(DESTROYER, 1), Tuple.Create(ESCORT, 3)}, null },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORT, 2)}, new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(TRAININGCRUISER, 1) } },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORTECARRIER, 1)}, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2), Tuple.Create(ESCORT, 2) } },
                 }, ShipNum=3, Ammunition=60, InstantRepairMaterials=1, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="鎮守", EName="海上護衛任務", Time="01:30", Lv=3, RequireShipType = new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
+            new ExpeditionInfo {Area="鎮守", EName="海上護衛任務", TimeSpan=new TimeSpan(01, 30, 00), Lv=3, RequireShipType = new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
                     { new Tuple<string, int>[] {Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2)}, null },
                     { new Tuple<string, int>[] {Tuple.Create(DESTROYER, 1), Tuple.Create(ESCORT, 3)}, null },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORT, 2)}, new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(TRAININGCRUISER, 1) } },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORTECARRIER, 1)}, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2), Tuple.Create(ESCORT, 2) } },
                 }, ShipNum=4, Fuel=200, Ammunition=200, Steel=20, Bauxite=20, },
-            new ExpeditionInfo {Area="鎮守", EName="防空射撃演習", Time="00:40", Lv=4, ShipNum=4, Bauxite=80, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="鎮守", EName="観艦式予行", Time="01:00", Lv=5,ShipNum=6, Steel=50, Bauxite=30, InstantBuildMaterials=1},
-            new ExpeditionInfo {Area="鎮守", EName="観艦式", Time="03:00", Lv=6, ShipNum=6, Fuel=50, Ammunition=100, Steel=50, Bauxite=50, InstantBuildMaterials=2, DevelopmentMaterials=1},
+            new ExpeditionInfo {Area="鎮守", EName="防空射撃演習", TimeSpan=new TimeSpan(00, 40, 00), Lv=4, ShipNum=4, Bauxite=80, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="鎮守", EName="観艦式予行", TimeSpan=new TimeSpan(01, 00, 00), Lv=5,ShipNum=6, Steel=50, Bauxite=30, InstantBuildMaterials=1},
+            new ExpeditionInfo {Area="鎮守", EName="観艦式", TimeSpan=new TimeSpan(03, 00, 00), Lv=6, ShipNum=6, Fuel=50, Ammunition=100, Steel=50, Bauxite=50, InstantBuildMaterials=2, DevelopmentMaterials=1},
 
-            new ExpeditionInfo {Area="鎮守", EName="兵站強化任務", Time="00:25", Lv=5, ShipNum=4, Fuel=45, Ammunition=45, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum = 3 },
-            new ExpeditionInfo {Area="鎮守", EName="海峡警備行動", Time="00:55", Lv=20, ShipNum=4, Fuel=70, Ammunition=40, Bauxite=10,DevelopmentMaterials=1, InstantRepairMaterials=1, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum = 4 , SumAA=70, SumASW=180},
-            new ExpeditionInfo {Area="鎮守", EName="長時間対潜警戒", Time="02:15", Lv=35,SumLv=185, ShipNum=5, Fuel=120, Steel=60,Bauxite=60, InstantRepairMaterials=1, DevelopmentMaterials=2, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1) }, null } }, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum =3 ,SumASW=280 },
+            new ExpeditionInfo {Area="鎮守", EName="兵站強化任務", TimeSpan=new TimeSpan(00, 25, 00), Lv=5, ShipNum=4, Fuel=45, Ammunition=45, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum = 3 },
+            new ExpeditionInfo {Area="鎮守", EName="海峡警備行動", TimeSpan=new TimeSpan(00, 55, 00), Lv=20, ShipNum=4, Fuel=70, Ammunition=40, Bauxite=10,DevelopmentMaterials=1, InstantRepairMaterials=1, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum = 4 , SumAA=70, SumASW=180},
+            new ExpeditionInfo {Area="鎮守", EName="長時間対潜警戒", TimeSpan=new TimeSpan(02, 15, 00), Lv=35,SumLv=185, ShipNum=5, Fuel=120, Steel=60,Bauxite=60, InstantRepairMaterials=1, DevelopmentMaterials=2, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1) }, null } }, RequireSumShipType=new string[]{ DESTROYER , ESCORT }, RequireSumShipTypeNum =3 ,SumASW=280 },
 
-            new ExpeditionInfo {Area="南西", EName="タンカー護衛任務", Time="04:00", Lv=3, RequireShipType= new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
+            new ExpeditionInfo {Area="南西", EName="タンカー護衛任務", TimeSpan=new TimeSpan(04, 00, 00), Lv=3, RequireShipType= new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> {
                     { new Tuple<string, int>[] {Tuple.Create(LIGHTCRUISER, 1)}, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2)} },
                     { new Tuple<string, int>[] {Tuple.Create(DESTROYER, 1)}, new Tuple<string, int>[] { Tuple.Create(ESCORT, 3) } },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORT, 2)}, new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(TRAININGCRUISER, 1) } },
                     { new Tuple<string, int>[] {Tuple.Create(ESCORTECARRIER, 1)}, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2), Tuple.Create(ESCORT, 2) } },
             }, ShipNum=4, Fuel=350, InstantRepairMaterials=2, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="南西", EName="強行偵察任務", Time="01:30", Lv=3, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 2) }, null } }, ShipNum=3, Ammunition=50, Bauxite=30, InstantRepairMaterials=1, InstantBuildMaterials=1},
-            new ExpeditionInfo {Area="南西", EName="ボーキサイト輸送任務", Time="05:00", Lv=6, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Bauxite=250, InstantRepairMaterials=1, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="南西", EName="資源輸送任務", Time="08:00", Lv=4, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Ammunition=250, Steel=200, DevelopmentMaterials=1, FurnitureBox="中1"},
-            new ExpeditionInfo {Area="南西", EName="鼠輸送作戦", Time="04:00", Lv=5, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 4) }, null } }, ShipNum=6, Fuel=240, Ammunition=300, InstantRepairMaterials=2, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="南西", EName="包囲陸戦隊撤収作戦", Time="06:00", Lv=6, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1) }, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 3) } } }, ShipNum=6, Ammunition=240, Steel=200, InstantRepairMaterials=1, DevelopmentMaterials=1},
-            new ExpeditionInfo {Area="南西", EName="囮機動部隊支援作戦", Time="12:00", Lv=8, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 2) }, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) } } }, ShipNum=6, Steel=300, Bauxite=400, DevelopmentMaterials=1, FurnitureBox="大1"},
-            new ExpeditionInfo {Area="南西", EName="艦隊決戦援護作戦", Time="15:00", Lv=10, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1) }, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) } } }, ShipNum=6, Fuel=500, Ammunition=500, Steel=200, Bauxite=200, InstantBuildMaterials=2, DevelopmentMaterials=2},
+            new ExpeditionInfo {Area="南西", EName="強行偵察任務", TimeSpan=new TimeSpan(01, 30, 00), Lv=3, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 2) }, null } }, ShipNum=3, Ammunition=50, Bauxite=30, InstantRepairMaterials=1, InstantBuildMaterials=1},
+            new ExpeditionInfo {Area="南西", EName="ボーキサイト輸送任務", TimeSpan=new TimeSpan(05, 00, 00), Lv=6, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Bauxite=250, InstantRepairMaterials=1, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="南西", EName="資源輸送任務", TimeSpan=new TimeSpan(08, 00, 00), Lv=4, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Ammunition=250, Steel=200, DevelopmentMaterials=1, FurnitureBox="中1"},
+            new ExpeditionInfo {Area="南西", EName="鼠輸送作戦", TimeSpan=new TimeSpan(04, 00, 00), Lv=5, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 4) }, null } }, ShipNum=6, Fuel=240, Ammunition=300, InstantRepairMaterials=2, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="南西", EName="包囲陸戦隊撤収作戦", TimeSpan=new TimeSpan(06, 00, 00), Lv=6, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1) }, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 3) } } }, ShipNum=6, Ammunition=240, Steel=200, InstantRepairMaterials=1, DevelopmentMaterials=1},
+            new ExpeditionInfo {Area="南西", EName="囮機動部隊支援作戦", TimeSpan=new TimeSpan(12, 00, 00), Lv=8, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 2) }, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) } } }, ShipNum=6, Steel=300, Bauxite=400, DevelopmentMaterials=1, FurnitureBox="大1"},
+            new ExpeditionInfo {Area="南西", EName="艦隊決戦援護作戦", TimeSpan=new TimeSpan(15, 00, 00), Lv=10, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1) }, new Tuple<string, int>[] { Tuple.Create(DESTROYER, 2) } } }, ShipNum=6, Fuel=500, Ammunition=500, Steel=200, Bauxite=200, InstantBuildMaterials=2, DevelopmentMaterials=2},
 
-            new ExpeditionInfo {Area="南西", EName="南西方面航空偵察作戦", Time="00:35", Lv=40,SumLv=150, ShipNum=6, Steel=10,Bauxite=30,InstantRepairMaterials=1,FurnitureBox="小1", RequireShipType =new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SEAPLANETENDER, 1), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, SumAA=200,SumASW=200,SumViewRange=140 },
+            new ExpeditionInfo {Area="南西", EName="南西方面航空偵察作戦", TimeSpan=new TimeSpan(00, 35, 00), Lv=40,SumLv=150, ShipNum=6, Steel=10,Bauxite=30,InstantRepairMaterials=1,FurnitureBox="小1", RequireShipType =new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SEAPLANETENDER, 1), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, SumAA=200,SumASW=200,SumViewRange=140 },
 
-            new ExpeditionInfo {Area="北方", EName="敵地偵察作戦", Time="00:45", Lv=20, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 3) }, null } }, ShipNum=6, Fuel=70, Ammunition=70, Steel=50},
-            new ExpeditionInfo {Area="北方", EName="航空機輸送作戦", Time="05:00", Lv=15, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 3), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Steel=300, Bauxite=100, InstantRepairMaterials=1},
-            new ExpeditionInfo {Area="北方", EName="北号作戦", Time="06:00", Lv=20, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AVIATIONBATTLESHIP, 2), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Fuel=400, Steel=50, Bauxite=30, DevelopmentMaterials=1, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="北方", EName="潜水艦哨戒任務",  Time="02:00", RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 1), Tuple.Create(LIGHTCRUISER, 1) }, null } }, Lv=1, ShipNum=2, Steel=150, DevelopmentMaterials=1, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="北方", EName="北方鼠輸送作戦", Time="02:20", Lv=15, SumLv=30, RequireItemNum=new Dictionary<string, int> { { DRUMCANISTER, 3 } }, RequireItemShipNum=new Dictionary<string, int>() { { DRUMCANISTER, 3 } }, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 4) }, null } }, ShipNum=5, Fuel=320, Ammunition=270, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="北方", EName="艦隊演習", Time="03:00", Lv=30, SumLv=45, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(HEAVYCRUISER, 1), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Ammunition=10},
-            new ExpeditionInfo {Area="北方", EName="航空戦艦運用演習", Time="04:00", Lv=50, SumLv=200, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AVIATIONBATTLESHIP, 2), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Ammunition=20, Bauxite=100},
-            new ExpeditionInfo {Area="北方", EName="北方航路海上護衛", Time="08:20", Lv=50, SumLv=200, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 4) }, null } },ShipNum=6, Fuel=500, Bauxite=150, InstantRepairMaterials=1, DevelopmentMaterials=2, FlagShipType = LIGHTCRUISER},
+            new ExpeditionInfo {Area="北方", EName="敵地偵察作戦", TimeSpan=new TimeSpan(00, 45, 00), Lv=20, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 3) }, null } }, ShipNum=6, Fuel=70, Ammunition=70, Steel=50},
+            new ExpeditionInfo {Area="北方", EName="航空機輸送作戦", TimeSpan=new TimeSpan(05, 00, 00), Lv=15, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 3), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Steel=300, Bauxite=100, InstantRepairMaterials=1},
+            new ExpeditionInfo {Area="北方", EName="北号作戦", TimeSpan=new TimeSpan(06, 00, 00), Lv=20, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AVIATIONBATTLESHIP, 2), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Fuel=400, Steel=50, Bauxite=30, DevelopmentMaterials=1, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="北方", EName="潜水艦哨戒任務",  TimeSpan=new TimeSpan(02, 00, 00), RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 1), Tuple.Create(LIGHTCRUISER, 1) }, null } }, Lv=1, ShipNum=2, Steel=150, DevelopmentMaterials=1, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="北方", EName="北方鼠輸送作戦", TimeSpan=new TimeSpan(02, 20, 00), Lv=15, SumLv=30, RequireItemNum=new Dictionary<string, int> { { DRUMCANISTER, 3 } }, RequireItemShipNum=new Dictionary<string, int>() { { DRUMCANISTER, 3 } }, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 4) }, null } }, ShipNum=5, Fuel=320, Ammunition=270, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="北方", EName="艦隊演習", TimeSpan=new TimeSpan(03, 00, 00), Lv=30, SumLv=45, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(HEAVYCRUISER, 1), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Ammunition=10},
+            new ExpeditionInfo {Area="北方", EName="航空戦艦運用演習", TimeSpan=new TimeSpan(04, 00, 00), Lv=50, SumLv=200, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AVIATIONBATTLESHIP, 2), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=6, Ammunition=20, Bauxite=100},
+            new ExpeditionInfo {Area="北方", EName="北方航路海上護衛", TimeSpan=new TimeSpan(08, 20, 00), Lv=50, SumLv=200, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 4) }, null } },ShipNum=6, Fuel=500, Bauxite=150, InstantRepairMaterials=1, DevelopmentMaterials=2, FlagShipType = LIGHTCRUISER},
 
-            new ExpeditionInfo {Area="西方", EName="通商破壊作戦", Time="40:00", Lv=25, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(HEAVYCRUISER, 2), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Fuel=900, Steel=500, },
-            new ExpeditionInfo {Area="西方", EName="敵母港空襲作戦", Time="80:00", Lv=30, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 1), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } },ShipNum=4, Bauxite=900, InstantRepairMaterials=3},
-            new ExpeditionInfo {Area="西方", EName="潜水艦通商破壊作戦", Time="20:00", Lv=1, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 2) }, null } }, ShipNum=2, Steel=800, DevelopmentMaterials=1, FurnitureBox="小2"},
-            new ExpeditionInfo {Area="西方", EName="西方海域封鎖作戦", Time="25:00", Lv=30, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 3) }, null } }, ShipNum=3, Steel=900, Bauxite=350, DevelopmentMaterials=2, FurnitureBox="中2"},
-            new ExpeditionInfo {Area="西方", EName="潜水艦派遣演習", Time="24:00", Lv=50, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 3) }, null } }, ShipNum=3, Bauxite=100, DevelopmentMaterials=1, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="西方", EName="潜水艦派遣作戦", Time="48:00", Lv=55, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 4) }, null } }, ShipNum=4, Bauxite=100, DevelopmentMaterials=3},
-            new ExpeditionInfo {Area="西方", EName="海外艦との接触", Time="02:00", Lv=60,  SumLv=200, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 4) }, null } }, ShipNum=4, Ammunition=30, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="西方", EName="遠洋練習航海", Time="24:00", Lv=5, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(TRAININGCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=3, Fuel=50, Ammunition=50, Steel=50, Bauxite=50, FurnitureBox="大1", FlagShipType = TRAININGCRUISER},
+            new ExpeditionInfo {Area="西方", EName="通商破壊作戦", TimeSpan=new TimeSpan(40, 00, 00), Lv=25, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(HEAVYCRUISER, 2), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=4, Fuel=900, Steel=500, },
+            new ExpeditionInfo {Area="西方", EName="敵母港空襲作戦", TimeSpan=new TimeSpan(80, 00, 00), Lv=30, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 1), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } },ShipNum=4, Bauxite=900, InstantRepairMaterials=3},
+            new ExpeditionInfo {Area="西方", EName="潜水艦通商破壊作戦", TimeSpan=new TimeSpan(20, 00, 00), Lv=1, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 2) }, null } }, ShipNum=2, Steel=800, DevelopmentMaterials=1, FurnitureBox="小2"},
+            new ExpeditionInfo {Area="西方", EName="西方海域封鎖作戦", TimeSpan=new TimeSpan(25, 00, 00), Lv=30, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 3) }, null } }, ShipNum=3, Steel=900, Bauxite=350, DevelopmentMaterials=2, FurnitureBox="中2"},
+            new ExpeditionInfo {Area="西方", EName="潜水艦派遣演習", TimeSpan=new TimeSpan(24, 00, 00), Lv=50, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 3) }, null } }, ShipNum=3, Bauxite=100, DevelopmentMaterials=1, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="西方", EName="潜水艦派遣作戦", TimeSpan=new TimeSpan(48, 00, 00), Lv=55, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 4) }, null } }, ShipNum=4, Bauxite=100, DevelopmentMaterials=3},
+            new ExpeditionInfo {Area="西方", EName="海外艦との接触", TimeSpan=new TimeSpan(02, 00, 00), Lv=60,  SumLv=200, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINE, 4) }, null } }, ShipNum=4, Ammunition=30, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="西方", EName="遠洋練習航海", TimeSpan=new TimeSpan(24, 00, 00), Lv=5, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(TRAININGCRUISER, 1), Tuple.Create(DESTROYER, 2) }, null } }, ShipNum=3, Fuel=50, Ammunition=50, Steel=50, Bauxite=50, FurnitureBox="大1", FlagShipType = TRAININGCRUISER},
 
-            new ExpeditionInfo {Area="南方", EName="MO作戦", Time="07:00", Lv=40, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 2), Tuple.Create(HEAVYCRUISER, 1), Tuple.Create(DESTROYER, 1) }, null } }, ShipNum=6, Fuel=0, Ammunition=0, Steel=240, Bauxite=280, DevelopmentMaterials=1, FurnitureBox="小2"},
-            new ExpeditionInfo {Area="南方", EName="水上機基地建設", Time="09:00", Lv=30, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SEAPLANETENDER, 2), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 1) }, null } }, ShipNum=6, Fuel=480, Ammunition=0, Steel=200, Bauxite=200, InstantRepairMaterials=1, FurnitureBox="中1"},
-            new ExpeditionInfo {Area="南方", EName="東京急行", Time="02:45", Lv=50, SumLv=200, RequireItemNum=new Dictionary<string, int>() { { DRUMCANISTER, 4 } } , RequireItemShipNum=new Dictionary<string, int>() { { DRUMCANISTER, 3 } }, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 5) }, null } }, ShipNum=6, Fuel=0, Ammunition=380, Steel=270, Bauxite=0, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="南方", EName="東京急行(弐)", Time="02:55", Lv=65, SumLv=240, RequireItemNum=new Dictionary<string, int>() { { DRUMCANISTER, 8 } }, RequireItemShipNum=new Dictionary<string, int>() { { DRUMCANISTER, 4 } }, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(DESTROYER, 5) }, null } },ShipNum=6, Fuel=420, Ammunition=0, Steel=200, Bauxite=0, FurnitureBox="小1"},
-            new ExpeditionInfo {Area="南方", EName="遠洋潜水艦作戦", Time="30:00", Lv=3, SumLv=180, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINETENDER, 1), Tuple.Create(SUBMARINE, 4), }, null } }, ShipNum=5, Fuel=0, Ammunition=0, Steel=300, Bauxite=0, InstantRepairMaterials=2, FurnitureBox="中1"},
-            new ExpeditionInfo {Area="南方", EName="水上機前線輸送", Time="06:50", Lv=25, SumLv=150, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(SEAPLANETENDER, 2), Tuple.Create(DESTROYER, 2) }, null } },ShipNum=6, Fuel=300, Ammunition=300, Steel=0, Bauxite=100, InstantRepairMaterials=1, FurnitureBox="小3", FlagShipType = LIGHTCRUISER},
+            new ExpeditionInfo {Area="南方", EName="MO作戦", TimeSpan=new TimeSpan(07, 00, 00), Lv=40, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(AIRCRAFTCARRIER, 2), Tuple.Create(HEAVYCRUISER, 1), Tuple.Create(DESTROYER, 1) }, null } }, ShipNum=6, Fuel=0, Ammunition=0, Steel=240, Bauxite=280, DevelopmentMaterials=1, FurnitureBox="小2"},
+            new ExpeditionInfo {Area="南方", EName="水上機基地建設", TimeSpan=new TimeSpan(09, 00, 00), Lv=30, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SEAPLANETENDER, 2), Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 1) }, null } }, ShipNum=6, Fuel=480, Ammunition=0, Steel=200, Bauxite=200, InstantRepairMaterials=1, FurnitureBox="中1"},
+            new ExpeditionInfo {Area="南方", EName="東京急行", TimeSpan=new TimeSpan(02, 45, 00), Lv=50, SumLv=200, RequireItemNum=new Dictionary<string, int>() { { DRUMCANISTER, 4 } } , RequireItemShipNum=new Dictionary<string, int>() { { DRUMCANISTER, 3 } }, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(DESTROYER, 5) }, null } }, ShipNum=6, Fuel=0, Ammunition=380, Steel=270, Bauxite=0, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="南方", EName="東京急行(弐)", TimeSpan=new TimeSpan(02, 55, 00), Lv=65, SumLv=240, RequireItemNum=new Dictionary<string, int>() { { DRUMCANISTER, 8 } }, RequireItemShipNum=new Dictionary<string, int>() { { DRUMCANISTER, 4 } }, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(DESTROYER, 5) }, null } },ShipNum=6, Fuel=420, Ammunition=0, Steel=200, Bauxite=0, FurnitureBox="小1"},
+            new ExpeditionInfo {Area="南方", EName="遠洋潜水艦作戦", TimeSpan=new TimeSpan(30, 00, 00), Lv=3, SumLv=180, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(SUBMARINETENDER, 1), Tuple.Create(SUBMARINE, 4), }, null } }, ShipNum=5, Fuel=0, Ammunition=0, Steel=300, Bauxite=0, InstantRepairMaterials=2, FurnitureBox="中1"},
+            new ExpeditionInfo {Area="南方", EName="水上機前線輸送", TimeSpan=new TimeSpan(06, 50, 00), Lv=25, SumLv=150, RequireShipType=new Dictionary<Tuple<string, int>[], Tuple<string, int>[]> { { new Tuple<string, int>[] { Tuple.Create(LIGHTCRUISER, 1), Tuple.Create(SEAPLANETENDER, 2), Tuple.Create(DESTROYER, 2) }, null } },ShipNum=6, Fuel=300, Ammunition=300, Steel=0, Bauxite=100, InstantRepairMaterials=1, FurnitureBox="小3", FlagShipType = LIGHTCRUISER},
         };
 
         public ExpeditionInfo()
@@ -341,24 +345,14 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool FlagshipLvCheck(Fleet fleet)
-        {
-            if (fleet.Ships.Length == 0) return false;
-
-            return fleet.Ships.First().Level >= Lv;
-        }
+        private bool FlagshipLvCheck(Fleet fleet) => fleet.Ships.Length == 0 ? false : fleet.Ships.First().Level >= Lv;
 
         /// <summary>
         /// 合計Lvチェック
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool SumLvCheck(Fleet fleet)
-        {
-            if (null == SumLv) return true;
-
-            return fleet.Ships.Select(s => s.Level).Sum() >= SumLv;
-        }
+        private bool SumLvCheck(Fleet fleet) => null == SumLv ? true : fleet.Ships.Select(s => s.Level).Sum() >= SumLv;
 
         /// <summary>
         /// 艦種取得
@@ -372,14 +366,9 @@ namespace ExpeditionListPlugin
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private bool RequireShipTypeCheck(Fleet fleet)
-        {
-            if (null == RequireShipType) return true;
-
-            return RequireShipType.Any(x =>
-                x.Key.All(y => fleet.Ships.Count(i => Regex.IsMatch(GetShipType(i), y.Item1)) >= y.Item2) &&
-                (x.Value == null ? true : x.Value.Any(z => fleet.Ships.Count(j => Regex.IsMatch(z.Item1, GetShipType(j))) >= z.Item2)));
-        }
+        private bool RequireShipTypeCheck(Fleet fleet) => null == RequireShipType ? true : RequireShipType.Any(x =>
+                                                                        x.Key.All(y => fleet.Ships.Count(i => Regex.IsMatch(GetShipType(i), y.Item1)) >= y.Item2) &&
+                                                                        (x.Value == null ? true : x.Value.Any(z => fleet.Ships.Count(j => Regex.IsMatch(z.Item1, GetShipType(j))) >= z.Item2)));
 
         /// <summary>
         /// 装備のチェック
@@ -388,7 +377,11 @@ namespace ExpeditionListPlugin
         /// <returns></returns>
         private bool RequireItemCheck(Fleet fleet)
         {
-            if (null == RequireItemNum || null == RequireItemShipNum) return true;
+            if (null == RequireItemNum || null == RequireItemShipNum)
+            {
+                return true;
+            }
+
             foreach (var pair in RequireItemShipNum)
             {
                 var shipNum = fleet.Ships.Where(
@@ -421,9 +414,15 @@ namespace ExpeditionListPlugin
         /// <returns></returns>
         private bool FlagShipTypeCheck(Fleet fleet)
         {
-            if (null == FlagShipType) return true;
+            if (null == FlagShipType)
+            {
+                return true;
+            }
 
-            if (0 == fleet.Ships.Length) return false;
+            if (0 == fleet.Ships.Length)
+            {
+                return false;
+            }
 
             var shiptype = fleet.Ships.First().Info.ShipType;
             var regexp = new Regex(FlagShipType);
@@ -440,7 +439,10 @@ namespace ExpeditionListPlugin
         private bool RequireSumShipTypeCheck(Fleet fleet)
         {
             //必要合算艦種が設定されていない場合は自動成功
-            if (null == RequireSumShipType) return true;
+            if (null == RequireSumShipType)
+            {
+                return true;
+            }
 
             var sum = 0;
             foreach (var siptype in RequireSumShipType)
@@ -450,7 +452,9 @@ namespace ExpeditionListPlugin
                      .Where(f => re.Match(f.Info.ShipType.Name).Success).Count();
 
                 if (sum >= RequireSumShipTypeNum)
+                {
                     return true;
+                }
             }
 
             return false;
@@ -470,7 +474,10 @@ namespace ExpeditionListPlugin
         /// <returns></returns>
         private bool SumASWCheck(Fleet fleet)
         {
-            if (null == SumASW) return true;
+            if (null == SumASW)
+            {
+                return true;
+            }
 
             var not_types = new SlotItemType[] { SlotItemType.水上偵察機, SlotItemType.水上爆撃機, SlotItemType.大型飛行艇 };
 
